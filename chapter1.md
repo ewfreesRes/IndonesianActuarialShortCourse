@@ -1,8 +1,10 @@
 ---
 title: Frees DataCamp Audition Video
-description: This is a template chapter.
----
+description: >-
+  This is a template chapter.
 
+
+---
 ## Ex 1.1
 
 ```yaml
@@ -15,46 +17,41 @@ key: 210d9bb371
 
 Do some data science.
 
-`@instructions`
 
 
-`@hint`
 
 
-`@pre_exercise_code`
 
-```{r}
 
-```
 
-`@sample_code`
 
-```{r}
 
-```
 
-`@solution`
-
-```{r}
-
-```
-
-`@sct`
-
-```{r}
-
-```
 
 ---
 ## Method of Least Squares
 
 ```yaml
 type: VideoExercise
-key: 7928777a1a
 lang: r
 xp: 50
 skills: 1
-video_link: player.vimeo.com/video/154783078
+key: 7928777a1a
 ```
 
+`@projector_key`
+undefined
 
+---
+## Method of Least Squares
+
+```yaml
+type: VideoExercise
+
+xp: 50
+
+key: 01b73dcea1
+```
+
+`@projector_key`
+9b4ac7f3c016747d1a84fc033f57ba36
