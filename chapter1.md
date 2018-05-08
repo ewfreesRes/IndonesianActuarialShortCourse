@@ -1,5 +1,5 @@
 ---
-title: Template Chapter 1
+title: Frees DataCamp Audition Video
 description: This is a template chapter.
 ---
 
@@ -44,3 +44,17 @@ Do some data science.
 ```{r}
 
 ```
+
+---
+## Method of Least Squares
+
+```yaml
+type: VideoExercise
+key: 7928777a1a
+lang: r
+xp: 50
+skills: 1
+video_link: player.vimeo.com/video/154783078
+```
+
+
