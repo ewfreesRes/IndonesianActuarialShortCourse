@@ -351,7 +351,8 @@ key: 5ea0bad4ec
 
 ```
 
-In later chapters, we will learn how to specify a model using diagnostics techniques; these techniques were used to specify face in log dollars for the outcome and similarly income in log dollars as an explanatory variable. Just to see how things work, in this exercise we will create new variables `face` and `income` that are in the original units and run a regression with these. We have already seen that rescaling by constants do not affect relationships but can be helpful with interpretations, so we define both  `face` and `income` to be in thousands of dollars. A prior video introduced the term life dataset `Term2`.
+In later chapters, we will learn how to specify a model using diagnostics techniques; these techniques were used to specify face in log dollars for the outcome and similarly income in log dollars as an explanatory variable. Just to see how things work, in this exercise we will create new variables `face` and `income` that are in the original units and run a regression with these. We have already seen that rescaling by constants do not affect relationships but can be helpful with interpretations, so we define both  `face` and `income` to be in thousands of dollars. A prior video introduced the term life dataframe `Term2`.
+
 
 `@instructions`
 - Create `Term2$face` by exponentiating `logface` and dividing by 1000. For convenience, we are storing this variable in the data set `Term2`. Use the same process to create `Term2$income`.
@@ -369,9 +370,14 @@ Term2 <- Term1[, c("education", "face", "income", "logface", "logincome", "numhh
 ```
 `@sample_code`
 ```{r}
-Term2$face <- exp(Term2$logface)/1000
-Term2$income <- exp(Term2$logincome)/1000
-Term_mlr1 <- lm(face ~ education + numhh + income, data = Term2)
+# Create `Term2$face` and  `Term2$income`
+Term2$face <- exp(___)/___
+Term2$income <- exp(___)/___
+
+# Run a regression using `face` as the outcome variable and `education`, `numhh`, and `income` as explanatory variables.
+Term_mlr1 <- lm(face ~ ___, data = Term2)
+
+# Summarize this model
 summary(Term_mlr1)
 ```
 `@solution`
@@ -442,7 +448,9 @@ key: aead731b59
 
 ```
 
-In the prior video, we saw how the variable `single` can be used with logarithmic income to explain logarithmic face amounts of term life insurance that people purchase. The coefficient associated with this variable turns out to be negative which is intuitively appealing; if an individual is single, then that person may not have the strong need to purchase financial security for others in the event of unexpected death. In this exercise, we will extend this by incorporating `single` into our larger regression model that contains other explanatory varibles, `logincome`, `education` and `numhh`.
+In the prior video, we saw how the variable `single` can be used with logarithmic income to explain logarithmic face amounts of term life insurance that people purchase. The coefficient associated with this variable turns out to be negative which is intuitively appealing; if an individual is single, then that person may not have the strong need to purchase financial security for others in the event of unexpected death. 
+
+In this exercise, we will extend this by incorporating `single` into our larger regression model that contains other explanatory varibles, `logincome`, `education` and `numhh`. The data have been pre-loaded into the dataframe `Term4`. 
 
 `@instructions`
 - Calculate a table of correlation coefficients to examine pairwise linear relationships among the variables `numhh`, `education`, `logincome`, `single`, and  `logface`.
@@ -461,9 +469,14 @@ Term4$single <- 1*(Term4$marstat == 0)
 ```
 `@sample_code`
 ```{r}
-round(cor(Term4[,c("numhh", "education", "logincome", "single", "logface")]), digits = 3)
+# Calculate a table of correlation coefficients
+round(___(Term4[,c("numhh", "education", "logincome", "single", "logface")]), digits = 3)
+
+# Fit a MLR model of `logface` using explanatory variables `numhh`, `education`, `logincome`, and `single`.
 Term_mlr3 <- lm(logface ~ education + numhh + logincome + single, data = Term4)
 summary(Term_mlr3)
+
+# Repeat the MLR model fit while adding the interaction term  `single*logincome`.
 Term_mlr4 <- lm(logface ~ education + numhh + logincome + single + single*logincome, data = Term4)
 summary(Term_mlr4)
 ```
@@ -477,7 +490,7 @@ summary(Term_mlr4)
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! From a correlation table, you saw that there are relationships with among explanatory variables and so it is not clear whether adding `single` to the model would be helpful. You explored this by first fitting a model by just adding the binary variable single, examined summary statistics, and checked the significance of the variable. Then, you explored the utility of the interaction of `single` with logarithmic income. Well done!")
+success_msg("Congratulations! From a correlation table, you saw that there are relationships with among explanatory variables and so it is not clear whether adding `single` to the model would be helpful. You explored this by first fitting a model by just adding the binary variable single, examined summary statistics, and checked the significance of the variable. Then, you explored the utility of the interaction of `single` with logarithmic income. Well done!")
 ```
 
 
