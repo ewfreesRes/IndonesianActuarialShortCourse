@@ -128,17 +128,17 @@ key: 33d706f7cb
 
 Automatic variable selection procedures, such as the classic stepwise regression algorithm, are very good at detecting patterns. Sometimes they are too good in the sense that they detect patterns in the sample that are not evident in the population from which the data are drawn. The detect "spurious" patterns.
 
-This excercise illustrates this phenomenom by using simulation techniques to draw a sample. The simulation is designed so that the outcome variable (*y*) and the explanatory variables are mutually independent. So, by design, there is no relationship between the outcome and the explanatory variables.
+This exercise illustrates this phenomenom by using a simulation, designed so that the outcome variable (*y*) and the explanatory variables are mutually independent. So, by design, there is no relationship between the outcome and the explanatory variables.
 
-As part of the code set-up, we have *n* = 100 observations generated of the outcome *y* and 50 explanatory variables, `xvar1` through `xvar50`. A few steps show that collections of explanatory variables are not statistically significant. However, with the [stepwise()](https://www.rdocumentation.org/packages/Rcmdr/versions/2.0-4/topics/stepwise) command, you will find some statistically significant relationships. This is because the `stepwise` procedure is repeatedly using *t*-tests - hypothesis testing procedures that are design to falsely detect a relationship $\alpha$ fraction of the time (typically 5\%). For example, if you run a *t*-test 50 times (for each explanatory variable), you can expect to get two or three "statistically significant" explanatory variables even for unrelated variables (because $50 \times 0.05 = 2.5$).
+As part of the code set-up, we have *n* = 100 observations generated of the outcome *y* and 50 explanatory variables, `xvar1` through `xvar50`. As anticipated, collections of explanatory variables are not statistically significant. However, with the [step()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/step) function, you will find some statistically significant relationships!
 
 `@instructions`
 - Fit a basic linear regression model and MLR model with the first ten explanatory variables. Compare the models via an *F* test.
 - Fit a multiple linear regression model with all fifty explanatory variables. Compare this model to the one with ten variables via an *F* test.
-- Use the `stepwise` function to find the best model starting with the fitted model containing all fifty explanatory variables.
-- Fit the model identified by the stepwise regression algorithm and summarize the fit.
+- Use the `step` function to find the best model starting with the fitted model containing all fifty explanatory variables and summarize the fit. 
 
 `@hint`
+The code shows stepwise regression using BIC, a criterion that results in simpler models than AIC. For AIC, use the option `k=2` in the [step()] function (the default)
 
 
 `@pre_exercise_code`
@@ -150,62 +150,34 @@ X$y <- with(X, matrix(rnorm(100*1, mean = 0, sd = 1), ncol = 1))
 ```
 `@sample_code`
 ```{r}
-modelStep1 <- lm(y ~ xvar1, data = X)
-summary(modelStep1)
+# Fit a basic linear regression model and MLR model with the first ten explanatory variables. Compare the models via an *F* test.
+model_step1 <- lm(y ~ xvar1, data = X)
+model_step10 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10, data = X)
+anova(___, ___)
 
-modelStep2 <- lm(y ~ xvar1 + xvar2 + xvar3, data = X)
-#summary(modelStep2)
-anova(modelStep1,modelStep2)
+# Fit a multiple linear regression model with all fifty explanatory variables. Compare this model to the one with ten variables via an *F* test.
+model_step50 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10 + xvar11 + xvar12 + xvar13 + xvar14 + xvar15 + xvar16 + xvar17 + xvar18 + xvar19 + xvar20 + xvar21 + xvar22 + xvar23 + xvar24 + xvar25 + xvar26 + xvar27 + xvar28 + xvar29 + xvar30 + xvar31 + xvar32 + xvar33 + xvar34 + xvar35 + xvar36 + xvar37 + xvar38 + xvar39 + xvar40 + xvar41 + xvar42 + xvar43 + xvar44 + xvar45 + xvar46 + xvar47 + xvar48 + xvar49 + xvar50, data = X)
+anova(___, ___)
 
-modelStep3 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10, data = X)
-#summary(modelStep3)
-anova(modelStep2,modelStep3)
-
-modelStep4 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10 + xvar11 + xvar12 + xvar13 + xvar14 + xvar15 + xvar16 + xvar17 + xvar18 + xvar19 + xvar20 + xvar21 + xvar22 + xvar23 + xvar24 + xvar25 + xvar26 + xvar27 + xvar28 + xvar29 + xvar30 + xvar31 + xvar32 + xvar33 + xvar34 + xvar35 + xvar36 + xvar37 + xvar38 + xvar39 + xvar40 + xvar41 + xvar42 + xvar43 + xvar44 + xvar45 + xvar46 + xvar47 + xvar48 + xvar49 + xvar50, data = X)
-#summary(modelStep4)
-anova(modelStep4)
-anova(modelStep3,modelStep4)
-
-#library(Rcmdr)
-#temp <- stepwise(modelStep4, direction = 'backward/forward')
-#summary(temp)
-
-#  The function "stepwise" is in the Rcmdr library. Alternatively, you can use "step" function as below:
-#  k CONTROLS THE COMPLEXITY OF THE MODEL
-#  step(modelStep4, k = log(length(y)))
-#  You can check the model of those three explanatory variables to see whether all of them are significant
-modelStep5 <- lm(y ~ xvar27 + xvar29 + xvar32, data = X)
-summary(modelStep5)
+# Use the `step` function, starting with the fitted model containing all fifty explanatory variables and summarize the fit.
+#For BIC: 
+model_stepwise <- step(___, data = X, direction= "both", k = log(nrow(X)), trace = 0) 
+summary(model_stepwise)
 ```
+
 `@solution`
 ```{r}
-modelStep1 <- lm(y ~ xvar1, data = X)
-summary(modelStep1)
+model_step1 <- lm(y ~ xvar1, data = X)
+model_step10 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10, data = X)
+anova(model_step1,model_step10)
+model_step50 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10 + xvar11 + xvar12 + xvar13 + xvar14 + xvar15 + xvar16 + xvar17 + xvar18 + xvar19 + xvar20 + xvar21 + xvar22 + xvar23 + xvar24 + xvar25 + xvar26 + xvar27 + xvar28 + xvar29 + xvar30 + xvar31 + xvar32 + xvar33 + xvar34 + xvar35 + xvar36 + xvar37 + xvar38 + xvar39 + xvar40 + xvar41 + xvar42 + xvar43 + xvar44 + xvar45 + xvar46 + xvar47 + xvar48 + xvar49 + xvar50, data = X)
+anova(model_step10,model_step50)
 
-modelStep2 <- lm(y ~ xvar1 + xvar2 + xvar3, data = X)
-#summary(modelStep2)
-anova(modelStep1,modelStep2)
-
-modelStep3 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10, data = X)
-#summary(modelStep3)
-anova(modelStep2,modelStep3)
-
-modelStep4 <- lm(y ~ xvar1 + xvar2 + xvar3 + xvar4 + xvar5 + xvar6 + xvar7 + xvar8 + xvar9 + xvar10 + xvar11 + xvar12 + xvar13 + xvar14 + xvar15 + xvar16 + xvar17 + xvar18 + xvar19 + xvar20 + xvar21 + xvar22 + xvar23 + xvar24 + xvar25 + xvar26 + xvar27 + xvar28 + xvar29 + xvar30 + xvar31 + xvar32 + xvar33 + xvar34 + xvar35 + xvar36 + xvar37 + xvar38 + xvar39 + xvar40 + xvar41 + xvar42 + xvar43 + xvar44 + xvar45 + xvar46 + xvar47 + xvar48 + xvar49 + xvar50, data = X)
-#summary(modelStep4)
-anova(modelStep4)
-anova(modelStep3,modelStep4)
-
-#library(Rcmdr)
-#temp <- stepwise(modelStep4, direction = 'backward/forward')
-#summary(temp)
-
-#  The function "stepwise" is in the Rcmdr library. Alternatively, you can use "step" function as below:
-#  k CONTROLS THE COMPLEXITY OF THE MODEL
-#  step(modelStep4, k = log(length(y)))
-#  You can check the model of those three explanatory variables to see whether all of them are significant
-modelStep5 <- lm(y ~ xvar27 + xvar29 + xvar32, data = X)
-summary(modelStep5)
+#For BIC: 
+model_stepwise <- step(model_step50, data = X, direction= "both", k = log(nrow(X)), trace = 0) 
+summary(model_stepwise)
 ```
+
 `@sct`
 ```{r}
 success_msg("Excellent! The step procedure repeatedly fits many models to a data set. We summarize each fit with hypothesis testing statistics like t-statistics and p-values. But, remember that hypothesis tests are designed to falsely detect a relationship a fraction of the time (typically 5%). For example, if you run a t-test 50 times (for each explanatory variable), you can expect to get two or three statistically significant explanatory variables even for unrelated variables (because 50 times 0.05 = 2.5).")
