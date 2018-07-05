@@ -559,29 +559,28 @@ Term1 <- subset(Term, subset = face > 0)
 ```
 `@sample_code`
 ```{r}
-#library(car)
-
-# Solution
+# Fit a MLR model of `logface` on explantory variables `education`, `numhh` and `logincome`
 Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term1)
-#vif(Term_mlr)
+
+# Calculate the variance inflation factors.
+car::vif(Term_mlr)
+
+# Fit and summarize a MLR model of `logface` on explantory variables `education` , `numhh` and `logincome` with an interaction between `numhh` and `logincome`, then extract variance inflation  factors.
 Term_mlr1 <- lm(logface ~ education + numhh*logincome , data = Term1)
 summary(Term_mlr1)
-#vif(Term_mlr1)
+car::vif(Term_mlr1)
 ```
 `@solution`
 ```{r}
-#library(car)
-
-# Solution
 Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term1)
-#vif(Term_mlr)
+car::vif(Term_mlr)
 Term_mlr1 <- lm(logface ~ education + numhh*logincome , data = Term1)
 summary(Term_mlr1)
-#vif(Term_mlr1)
+car::vif(Term_mlr1)
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! This exercise underscores that approximately colinearity among explanatory variables can be induced when introducing higher order terms such as interactions. Note that in the interation model the variable 'numhh' does not appear to be statistically effect. This is one of the big dangers of collinearity - it can mask important effects.")
+success_msg("Excellent! This exercise underscores that colinearity among explanatory variables can be induced when introducing higher order terms such as interactions. Note that in the interaction model the variable 'numhh' does not appear to be statistically signficant effect. This is one of the big dangers of collinearity - it can mask important effects.")
 ```
 
 
@@ -640,11 +639,12 @@ key: 708d227779
 
 ```
 
+
 Here is some sample code to give you a better feel for cross-validation.
 
-The first part of the random re-orders ("shuffles") the data. It also identifies explanatory variables `explvars`.
+The first part of the randomly re-orders ("shuffles") the data. It also identifies explanatory variables `explvars`.
 
-In the function starts with pulling out only the needed data into `cvdata`. Then, for each subsample, a model is fit based on all the data except for the subsample, in `train_mlr` with the subsample in `test`. 
+The function starts by pulling out only the needed data into `cvdata`. Then, for each subsample, a model is fit based on all the data except for the subsample, in `train_mlr` with the subsample in `test`. This is repeated for each subsample, then results are summarized.
 
 ```
 # Randomly re-order data - "shuffle it"
@@ -653,6 +653,7 @@ set.seed(12347)
 shuffled_Term1 <- Term1[sample(n), ]
 explvars <- c("education", "numhh", "logincome")
 
+## Cross - Validation
 crossvalfct <- function(explvars){
   cvdata   <- shuffled_Term1[, c("logface", explvars)]
   crossval <- 0
@@ -671,7 +672,10 @@ crossvalfct <- function(explvars){
   }
   crossval/1000
 }
+
+crossvalfct(explvars)
 ```
+
 
 `@instructions`
 - Calculate the cross-validation statistic using only logarithmic income, `logincome`.
@@ -681,7 +685,7 @@ crossvalfct <- function(explvars){
 The best model has the lowest cross-validation statistic.
 
 `@hint`
-
+The function [sample()] is for taking random samples. We use it without replacement so it results in a re-ordering of data.
 
 `@pre_exercise_code`
 ```{r}
@@ -708,19 +712,20 @@ crossvalfct <- function(explvars){
   }
   crossval/1000000
 }
+
 ```
 `@sample_code`
 ```{r}
-# Randomly re-order data - "shuffle it"
-n <- nrow(Term1)
-set.seed(12347)
-shuffled_Term1 <- Term1[sample(n), ]
-## Cross - Validation
+# Calculate the cross-validation statistic using only logarithmic income, `logincome`.
 explvars <- c("logincome")
 crossvalfct(explvars)
+
+# Calculate the cross-validation statistic using `logincome`, `education` and `numhh`.
 explvars <- c("education", "numhh", "logincome")
-crossvalfct(explvars)
-explvars <- c("education", "numhh", "logincome", "marstat")
+crossvalfct(___)
+
+# Calculate the cross-validation statistic using `logincome`, `education`, `numhh` and `marstat`.
+explvars <- c(___)
 crossvalfct(explvars)
 ```
 `@solution`
