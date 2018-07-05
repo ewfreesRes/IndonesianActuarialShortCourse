@@ -326,16 +326,16 @@ key: bf6301515f
 
 ```
 
-Let us see how rescaling, a linear transformation, affects our measures of uncertainty. As before, the Wisconsin lottery dataset  `Wisc_lottery` is available and this dataset contains `sales_1000`, sales in thousands of dollars, and `pop_1000`, zip code population in thousands. How do measures of uncertainty change when going from the original units to thousands of those units?
+Let us see how rescaling, a linear transformation, affects our measures of uncertainty. As before, the Wisconsin lottery dataset  `Wisc_lottery` has been read into a dataframe `Lot` that also contains `sales_1000`, sales in thousands of dollars, and `pop_1000`, zip code population in thousands. How do measures of uncertainty change when going from the original units to thousands of those units?
 
 `@instructions`
 - Run a regression of `pop` on `sales_1000` and summarize this in an ANOVA table.
-- For this regression, determine the $s$ and the coefficient of determiniation, $R^2$.  
+- For this regression, determine the $s$ and the coefficient of determination, $R^2$.  
 - Run a regression of `pop_1000` on `sales_1000` and summarize this in an ANOVA table.
-- For this regression, determine the $s$ and the coefficient of determination, $R^2$.
+- For this regression, determine the $s$ and the coefficient of determination, $R^2$.  
 
 `@hint`
-
+The residual standard error is also available as `summary(model_blr1)$sigma`. The coefficient of determination is also available as `summary(model_blr1)$r.squared`.
 
 `@pre_exercise_code`
 ```{r}
@@ -345,14 +345,21 @@ Lot$sales_1000 <- Lot$sales/1000
 ```
 `@sample_code`
 ```{r}
+# Run a regression of `pop` on `sales_1000` and summarize this in an ANOVA table.
 model_blr1 <- lm(sales_1000  ~ pop, data = Lot)
-anova(model_blr1)
-sqrt(anova(model_blr1)$Mean[2])
-summary(model_blr1)$r.squared
-model_blr2 <- lm(sales_1000  ~ pop_1000 , data = Lot)
+anova(___)
+
+# Determine the $s$ and the coefficient of determination, $R^2$.  
+sqrt(anova(___)$Mean[2])
+summary(___)$r.squared
+
+# Run a regression of `pop_1000` on `sales_1000` and summarize this in an ANOVA table.
+model_blr2 <- lm(___  ~ ___, data = Lot)
 anova(model_blr2)
-sqrt(anova(model_blr2)$Mean[2])
-summary(model_blr2)$r.squared
+
+# Determine the $s$ and the coefficient of determination, $R^2$. 
+___
+___
 ```
 `@solution`
 ```{r}
@@ -364,10 +371,11 @@ model_blr2 <- lm(sales_1000  ~ pop_1000 , data = Lot)
 anova(model_blr2)
 sqrt(anova(model_blr2)$Mean[2])
 summary(model_blr2)$r.squared
+
 ```
 `@sct`
 ```{r}
-success_msg("Congratulations! In this exercise, you have seen that rescaling does not affect our measures of goodness of fit in any meaningful way. For example, coeffcient of determinations are completely unaffected. This is helpful because we will rescale variables extensively in our search for patterns in the data.")
+success_msg("Congratulations! In this exercise, you have seen that rescaling does not affect our measures of goodness of fit in any meaningful way. For example, the coefficient of determinations are completely unaffected. This is helpful because we will rescale variables extensively in our search for patterns in the data.")
 ```
 
 
@@ -428,17 +436,17 @@ key: 3ff9e5fec7
 
 ```
 
-In a previous exercise, you developed a regression line to fit the variable `medhome`, the median house price for each zip code, as a predictor of lottery sales. The regression of `medhome` on `sales` has been summarized in the `R` object `model_blr`.
+In a previous exercise, you developed a regression line with the variable `medhome`, the median house price for each zip code, as a predictor of lottery sales. The regression of `medhome` on `sales` has been summarized in the `R` object `model_blr`.
   
-This exercise will give you practice in the standard inferential tasks: hypothesis testing, confidence intervals, and prediction.
+This exercise allows you to practice the standard inferential tasks: hypothesis testing, confidence intervals, and prediction.
 
 `@instructions`
-- Summarize the regression model and identify the $t$-statistic for testing the importance of the regression coefficient associated with `medhome`.
+- Summarize the regression model and identify the *t*-statistic for testing the importance of the regression coefficient associated with `medhome`.
 - Use the function [confint()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/confint) to provide a 95\% confidence interval for the regression coefficient associated with `medhome`.
 - Consider a zip code with a median housing price equal to 50 (in thousands of dollars). Use the function [predict()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/predict) to provide a point prediction and a 95\% prediction interval for sales.
 
 `@hint`
-
+Taking a [summary()] of a regression object produces a new objeect. You can use the [str()] structure command to learn more about the new object. Try out a command such as `str(summary(model_blr))`
 
 `@pre_exercise_code`
 ```{r}
@@ -447,16 +455,25 @@ Lot <- read.csv("https://assets.datacamp.com/production/repositories/2610/datase
 `@sample_code`
 ```{r}
 model_blr1 <- lm(sales ~ medhome, data = Lot)
-summary(model_blr1)
-#Rcmdr::Confint(model_blr1, level = .95)
-confint(model_blr1, level = .95)
+# Summarize the regression model and identify the $t$-statistic for testing the importance of the regression coefficient associated with `medhome`.
+summary(___)
+summary(___)$coefficients
+summary(___)$coefficients[,3]
+
+# Provide a 95\% confidence interval for the regression coefficient associated with `medhome`.
+confint(___, level = ___)
+
+
+# Provide a point prediction and a 95\% prediction interval for sales.
 NewData1 <- data.frame(medhome = 50)
-predict(model_blr1, NewData1, interval = "prediction", level = .95)
+predict(___, NewData1, interval = "prediction", level = ___)
 ```
 `@solution`
 ```{r}
 model_blr1 <- lm(sales ~ medhome, data = Lot)
 summary(model_blr1)
+summary(model_blr1)$coefficients
+summary(model_blr1)$coefficients[,3]
 #Rcmdr::Confint(model_blr1, level = .95)
 confint(model_blr1, level = .95)
 NewData1 <- data.frame(medhome = 50)
