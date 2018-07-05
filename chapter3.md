@@ -554,9 +554,9 @@ This exercise examines the impact of various predictors on hospital charges. Ide
 
 - `drg`, diagnostic related groups of costs, 
 - `payer`, type of health care provider (Fee for service, HMO, and other), and 
-- `hsa`, nine major geographic areas.
+- `hsa`, nine major geographic areas in Wisconsin.
 
-Some preliminary analysis of the data has already been done. In this exercise, we will analyze `logcharge`, the logarithm of total hospital charges per number of discharges, in terms of `log_numdschg`, the logarithm of the number of discharges. In the dataset `Hcost` which has been loaded in advance, we restrict consideration to three types of drgs, numbers 209, 391, and 431.
+Some preliminary analysis of the data has already been done. In this exercise, we will analyze `logcharge`, the logarithm of total hospital charges per number of discharges, in terms of `log_numdschg`, the logarithm of the number of discharges. In the dataframe `Hcost` which has been loaded in advance, we restrict consideration to three types of drgs, numbers 209, 391, and 431.
 
 `@instructions`
 - Fit a basic linear regression model using logarithmic number of discharges to predict logarithmic hospital costs and superimposed the fitted regression line on the scatter plot.
@@ -574,17 +574,21 @@ Hcost1 <- subset(Hcost, drg == 209|drg == 391|drg == 430)
 ```
 `@sample_code`
 ```{r}
+# Fit a basic linear regression model using logarithmic number of discharges to predict logarithmic hospital costs and superimposed the fitted regression line on the scatter plot.
 hosp_blr <- lm(logcharge~log_numdschg, data=Hcost1)
 plot(logcharge~log_numdschg, data=Hcost1, xlab = "log number discharges", ylab = "log charge")
 abline(hosp_blr, col="red")
 
+# Produce a scatter plot of logarithmic number of discharges to predict logarithmic hospital costs. Allow plotting symbols and colors to vary by diagnostic related group.
 plot(logcharge~log_numdschg, data=Hcost1, xlab = "log number discharges", ylab = "log charge",
     pch= as.numeric(as.factor(Hcost1$drg)), 
     col = c("red", "black", "blue")[as.factor(Hcost1$drg)])
 legend("left", legend=c("drg 209","drg 391", "drg 430"), col=c("red", "black", "blue"), pch = c(1,2,3))
 
+# Fit a MLR model allowing intercepts and slopes to vary by drg.
 hosp_mlr <- lm(logcharge~log_numdschg + as.factor(drg)*log_numdschg, data=Hcost1)
-#summary(hosp_mlr)$coefficients[,1]
+
+# Superimpose the fits from the MLR model on the scatter plot of logarithmic number of discharges to predict logarithmic hospital costs.
 plot(logcharge~log_numdschg, data=Hcost1, xlab = "log number discharges", ylab = "log charge",
          pch= as.numeric(as.factor(Hcost1$drg)), 
     col = c("red", "black", "blue")[as.factor(Hcost1$drg)])
@@ -684,9 +688,9 @@ key: 1d698fbe58
 
 ```
 
-In the context of our `Term life` data, let us compare model based on the binary variable that indicates whether a survey respondent is single versus the more complex marital status, `marstat`. In principle, the more detailed information the better but it may be that the additional information in `marstat`, compared to `single`, does not help fit the data in a significantly better way. 
+With our `Term life` data, let us compare a model based on the binary variable that indicates whether a survey respondent is single versus the more complex marital status, `marstat`. In principle, more detailed information is better. But, it may be that the additional information in `marstat`, compared to `single`, does not help fit the data in a significantly better way. 
 
-As part of the preparatory work, the dataset `Term4` is available that includes the binary variable `single` and the factor `marstat`. Moreover, the object `Term_mlr` contains information in a multiple linear regression fit of `logface` on the base explanatory variables 'logincome`, `education`, and `numhh`.
+As part of the preparatory work, the dataframe `Term4` is available that includes the binary variable `single` and the factor `marstat`. Moreover, the regression object `Term_mlr` contains information in a multiple linear regression fit of `logface` on the base explanatory variables 'logincome`, `education`, and `numhh`. 
 
 `@instructions`
 - Fit a MLR model using the base explanatory variables plus `single` and another model using the base variables plus `marstat`.
@@ -695,7 +699,11 @@ As part of the preparatory work, the dataset `Term4` is available that includes 
 - Use the F test to decide whether the additional complexity `marstat` is warranted by calculating the p-value associated with this test.
 
 `@hint`
-
+Here is the code to calculate it by hand
+Fstat12 <- (anova(Term_mlr1)$`Sum Sq`[5] - 
+              anova(Term_mlr2)$`Sum Sq`[5])/(1*anova(Term_mlr2)$`Mean Sq`[5])
+Fstat12
+cat("p-value is", 1 - pf(Fstat12, df1 = 1 , df2 = anova(Term_mlr2)$Df[5]))
 
 `@pre_exercise_code`
 ```{r}
@@ -709,35 +717,36 @@ anova(Term_mlr)
 ```
 `@sample_code`
 ```{r}
-Term_mlr3 <- lm(logface ~ logincome + education + numhh + single*logincome, data = Term4)
-anova(Term_mlr3)
-Fstat <- (anova(Term_mlr)$`Sum Sq`[4] - anova(Term_mlr3)$`Sum Sq`[6])/(2*anova(Term_mlr3)$`Mean Sq`[6])
-Fstat
-cat("p-value is", 1 - pf(Fstat, df1 = 2 , df2 = anova(Term_mlr3)$Df[6]))
+# Fit a MLR model using the base explanatory variables plus `single` and another model using the base variables plus `marstat`.
+Term_mlr1 <- lm(logface ~ logincome + education + numhh +single, data = Term4)
+Term_mlr2 <- lm(logface ~ logincome + education + numhh +marstat, data = Term4)
 
+# Use the F test to decide whether the additional complexity `marstat` is warranted by calculating the p-value associated with this test.
+anova(Term_mlr1,Term_mlr2)
+
+# Fit a MLR model using the base explanatory variables plus `single` interacted with `logincome` and another model using the base variables plus `marstat` interacted with `logincome`.
+Term_mlr3 <- lm(logface ~ logincome + education + numhh + single*logincome, data = Term4)
 Term_mlr4 <- lm(logface ~ logincome + education + numhh +marstat*logincome, data = Term4)
-anova(Term_mlr4)
-Fstat <- (anova(Term_mlr3)$`Sum Sq`[6] - anova(Term_mlr4)$`Sum Sq`[6])/(2*anova(Term_mlr4)$`Mean Sq`[6])
-Fstat
-cat("p-value is", 1 - pf(Fstat, df1 = 2 , df2 = anova(Term_mlr4)$Df[6]))
+
+# Use the F test to decide whether the additional complexity `marstat` is warranted by calculating the p-value associated with this test.
+anova(Term_mlr3,Term_mlr4)
 ```
 `@solution`
 ```{r}
+Term_mlr1 <- lm(logface ~ logincome + education + numhh +single, data = Term4)
+Term_mlr2 <- lm(logface ~ logincome + education + numhh +marstat, data = Term4)
+anova(Term_mlr1,Term_mlr2)
+#Fstat12 <- (anova(Term_mlr1)$`Sum Sq`[5] - 
+#              anova(Term_mlr2)$`Sum Sq`[5])/(1*anova(Term_mlr2)$`Mean Sq`[5])
+#Fstat12
+#cat("p-value is", 1 - pf(Fstat12, df1 = 1 , df2 = anova(Term_mlr2)$Df[5]))
 Term_mlr3 <- lm(logface ~ logincome + education + numhh + single*logincome, data = Term4)
-anova(Term_mlr3)
-Fstat <- (anova(Term_mlr)$`Sum Sq`[4] - anova(Term_mlr3)$`Sum Sq`[6])/(2*anova(Term_mlr3)$`Mean Sq`[6])
-Fstat
-cat("p-value is", 1 - pf(Fstat, df1 = 2 , df2 = anova(Term_mlr3)$Df[6]))
-
 Term_mlr4 <- lm(logface ~ logincome + education + numhh +marstat*logincome, data = Term4)
-anova(Term_mlr4)
-Fstat <- (anova(Term_mlr3)$`Sum Sq`[6] - anova(Term_mlr4)$`Sum Sq`[6])/(2*anova(Term_mlr4)$`Mean Sq`[6])
-Fstat
-cat("p-value is", 1 - pf(Fstat, df1 = 2 , df2 = anova(Term_mlr4)$Df[6]))
+anova(Term_mlr3,Term_mlr4)
 ```
 `@sct`
 ```{r}
-success_msg("Congratulations! Hypothesis testing is a type of 'statistical inference' in that it is one of the main ways in which we can summarize what a model is 'inferring' about the real world (in contrast to mathematical 'deduction'.) Moreover, as we will see in the next chapter, it can also be used as a tool to develop a model.")
+success_msg("Congratulations! Hypothesis testing is a primary tool for  "inferring" about the real world {in contrast to mathematical "deduction".} Moreover, as we will see in the next chapter, it can also be used to develop a model.")
 ```
 
 
@@ -765,12 +774,12 @@ In a previous exercise, you were introduced to a dataset with hospital charges a
 - `payer`, type of health care provider (Fee for service, HMO, and other), and 
 - `hsa`, nine major geographic areas.
 
-We continue our analysis of the outcome variable  `logcharge`, the logarithm of total hospital charges per number of discharges, in terms of `log_numdschg`, the logarithm of the number of discharges, as well as the three categorical variables used in the aggregation. As before, we restrict consideration to three types of drgs, numbers 209, 391, and 431 that has been preloaded in the dataset `Hcost1`.
+We continue our analysis of the outcome variable  `logcharge`, the logarithm of total hospital charges per number of discharges, in terms of `log_numdschg`, the logarithm of the number of discharges, as well as the three categorical variables used in the aggregation. As before, we restrict consideration to three types of drgs, numbers 209, 391, and 431 that has been preloaded in the dataframe `Hcost1`.
 
 `@instructions`
 - Fit a basic linear regression model using logarithmic hospital costs as the outcome variable and explanatory variable logarithmic number of discharges.
-- Fit a MLR model using logarithmic hospital costs as the outcome variable and explanatory variables logarithmic number of discharges and the categorical variable diagnostic related group. Identify the *F* statistic and *p* value that tests the importance of diagnostic related group. 
-- Fit a MLR model using logarithmic hospital costs as the outcome variable and explanatory variable logarithmic number of discharges interacted with diagnostic related group. Identify the *F* statistic and *p* value that tests the importance of diagnostic related group interaction with logarithmic number of discharges.
+- Fit a MLR model using logarithmic hospital costs as the outcome variable and explanatory variables logarithmic number of discharges and the categorical variable diagnostic related group. Identify the *F* statistic and *p* value that test the importance of diagnostic related group. 
+- Fit a MLR model using logarithmic hospital costs as the outcome variable and explanatory variable logarithmic number of discharges interacted with diagnostic related group. Identify the *F* statistic and *p* value that test the importance of diagnostic related group interaction with logarithmic number of discharges.
 - Calculate a coefficient of determination, $R^2$, for each of these models as well as for a model using logarithmic number of discharges and categorical variable `hsa` as predictors.
 
 `@hint`
@@ -783,12 +792,19 @@ Hcost1 <- subset(Hcost, drg == 209|drg == 391|drg == 430)
 ```
 `@sample_code`
 ```{r}
+# Regress log charges on log number of discharges
 hosp_blr <- lm(logcharge ~ log_numdschg , data=Hcost1)
 anova(hosp_blr)
+
+# Regress log charges on log number of discharges and drg. Identify the *F* statistic and *p* value that test the importance of diagnostic related group.
 hosp_mlr1 <- lm(logcharge ~ log_numdschg + as.factor(drg), data=Hcost1)
 anova(hosp_mlr1)
+
+# Regress log charges on the interaction of log number of discharges and drg. 
 hosp_mlr2 <- lm(logcharge ~ log_numdschg + as.factor(drg)*log_numdschg, data=Hcost1)
 anova(hosp_mlr2)
+
+# Calculate a coefficient of determination, $R^2$, for each of these models as well as for a model using logarithmic number of discharges and categorical variable `hsa` as predictors.
 summary(hosp_blr)$r.squared
 summary(hosp_mlr1)$r.squared
 summary(hosp_mlr2)$r.squared
@@ -798,18 +814,7 @@ summary(hosp_mlr3)$r.squared
 ```
 `@solution`
 ```{r}
-hosp_blr <- lm(logcharge ~ log_numdschg , data=Hcost1)
-anova(hosp_blr)
-hosp_mlr1 <- lm(logcharge ~ log_numdschg + as.factor(drg), data=Hcost1)
-anova(hosp_mlr1)
-hosp_mlr2 <- lm(logcharge ~ log_numdschg + as.factor(drg)*log_numdschg, data=Hcost1)
-anova(hosp_mlr2)
-summary(hosp_blr)$r.squared
-summary(hosp_mlr1)$r.squared
-summary(hosp_mlr2)$r.squared
 
-hosp_mlr3 <- lm(logcharge ~ log_numdschg + as.factor(hsa)*log_numdschg, data=Hcost1)
-summary(hosp_mlr3)$r.squared
 ```
 `@sct`
 ```{r}
