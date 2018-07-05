@@ -240,9 +240,10 @@ key: 953793c347
 
 ```
 
-This exercise examines data, pre-loaded in the object `survey`, from a survey on the cost effectiveness of risk management practices. Risk management practices are activities undertaken by a firm to minimize the potential cost of future losses, such as the event of a fire in a warehouse or an accident that injures employees. This exercise develops a model that can be used to make statements about cost of managing risks.
+This exercise examines data, pre-loaded in the dataframe `survey`, from a survey on the cost effectiveness of risk management practices. Risk management practices are activities undertaken by a firm to minimize the potential cost of future losses, such as the event of a fire in a warehouse or an accident that injures employees. This exercise develops a model that can be used to make statements about cost of managing risks.
 
-A measure of risk management cost effectiveness, `logcost`, is the outcome variable. This variable is defined as total property and casualty premiums and uninsured losses as a proportion of total assets, in logarithmic units. It is a proxy for annual expenditures associated with insurable events, standardized by company size. Explanatory variables include `logsize`, the logarithm of total firm assets, and `indcost`, a measure of the firm's industry risk.
+A measure of risk management cost effectiveness, `logcost`, is the outcome variable. This variable is defined as total property and casualty premiums and uninsured losses as a proportion of total assets, in logarithmic units. It is a proxy for annual expenditures associated with insurable events, standardized by company size. Explanatory variables include
+`logsize`, the logarithm of total firm assets, and `indcost`, a measure of the firm's industry risk.
 
 `@instructions`
 - Fit and summarize a MLR model using `logcost` as the outcome variable and `logsize` and `indcost` as explanatory variables.
@@ -251,7 +252,7 @@ A measure of risk management cost effectiveness, `logcost`, is the outcome varia
 - Plot residuals of the fitted model versus `indcost' and superimpose a locally fitted line using [lowess()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/lowess).
 
 `@hint`
-
+You can access model residuals using `mlr.survey1$residuals` or `mlr.survey1($residuals)`
 
 `@pre_exercise_code`
 ```{r}
@@ -260,17 +261,21 @@ survey$logcost <- log(survey$firmcost)
 ```
 `@sample_code`
 ```{r}
+# Regress `logcost` on `logsize` and `indcost` 
 mlr.survey1 <- lm(logcost ~ logsize + indcost, data = survey)
-summary(mlr.survey1)
+summary(___)
 
-plot(survey$indcost, mlr.survey1$residuals)
-lines(lowess(survey$indcost,mlr.survey1$residuals))
+# Plot residuals of the fitted model versus `indcost` and superimpose a locally fitted line using the  function [lowess()]
+plot(survey$indcost,  ___)
+lines(lowess(survey$indcost, ___))
 
-mlr.survey2 <- lm(logcost ~ logsize + poly(indcost,2), data = survey)
-summary(mlr.survey2)
+# Regress `logcost` on `logsize` and `indcost` and `indcost` squared
+mlr.survey2 <- lm(___ ~ logsize + poly(indcost,2), data = survey)
+summary(___)
 
-plot(survey$indcost, mlr.survey2$residuals)
-lines(lowess(survey$indcost,mlr.survey2$residuals))
+# Plot residuals of this fitted model and superimpose a locally fitted line using the function [lowess()]
+plot(survey$indcost, ___)
+lines(lowess(survey$indcost, ___))
 ```
 `@solution`
 ```{r}
@@ -350,7 +355,7 @@ key: b52fd7ccef
 
 ```
 
-In chapter 2, we consider a fictitious data set of 19 "base" points plus three different types of unusual points. In this exercise, we consider the effect of one unusal point, "C", this both an outlier (unusual in the "y" direction) and an influential point (usual in the x-space). The data have been pre-loaded in the dataframe `outlrC`.
+In chapter 2, we consider a fictitious data set of 19 "base" points plus three different types of unusual points. In this exercise, we consider the effect of one unusal point, "C", this both an outlier (unusual in the "y" direction) and a high leverage point (usual in the x-space). The data have been pre-loaded in the dataframe `outlrC`.
 
 `@instructions`
 - Fit a basic linear regression model of `y` on `x` and store the result in an object.
@@ -368,12 +373,20 @@ outlrC <-outlr[-c(20,21),c("x","y")]
 ```
 `@sample_code`
 ```{r}
-plot(outlrC)
+outlrC <- outlr[-c(20,21),c("x","y")]
+
+# Fit a basic linear regression model of `y` on `x` and store the result in an object.
 model_outlrC <- lm(y ~ x, data = outlrC)
+
+# Extract the standardized residuals from the fitted regression model object and summarize them.
 ri <- rstandard(model_outlrC)
 summary(ri)
+
+# Extract the leverages from the model fitted and summarize them. 
 hii <- hatvalues(model_outlrC)
 summary(hii)
+
+# Plot the standardized residuals versus the leverages
 plot(hii,ri)
 ```
 `@solution`
@@ -385,10 +398,11 @@ summary(ri)
 hii <- hatvalues(model_outlrC)
 summary(hii)
 plot(hii,ri)
+
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! With only two variables, we could argue graphically that observations were unusual. In this exercise, we showed how certain statistics could be used to identify usual observations. Although not really necessary in basic linear regression, the main advantage of the statistics is that they work readily in a multivariate setting.")
+success_msg("Excellent! With only two variables, we could argue graphically that observations were unusual. In this exercise, we showed how statistics could also be used to identify usual observations. Although not really necessary in basic linear regression, the main advantage of the statistics is that they work readily in a multivariate setting.")
 ```
 
 
