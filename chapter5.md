@@ -140,10 +140,10 @@ We start by fitting a benchmark model. It is common to use all available explana
 - Randomly split the data into a training and a testing data sets. Use 75\% for the training, 25\% for the testing.
 - Fit a full model using `expendop` as the outcome and all explanatory variables. Summarize the results of this model fitting.
 - You can [plot()](https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/plot) the fitted model to view several diagnostic plots. These plots provide evidence that expenditures may not be the best scale for linear regression.
-- Fit a full model using `logexpend` as the outcome and all explanatory variables. Use the [plot()]() function for evidence that this variable is more suited for linear regression methods than expenditures on the original scale.
+- Fit a full model using `logexpend` as the outcome and all explanatory variables and summarize the fit. Use the [plot()]() function for evidence that this variable is more suited for linear regression methods than expenditures on the original scale.
 
 `@hint`
-
+A `plot` of a regression object such as plot(mlr) provides four diagnostic plots. These can be organized as a 2 by 2 array using `par(mfrow = c(2, 2))`.
 
 `@pre_exercise_code`
 ```{r}
@@ -152,7 +152,7 @@ meps$logexpend <- log(meps$expendop)
 ```
 `@sample_code`
 ```{r}
-# Split the sample into a `training` and `test` data
+# Randomly split the data into a training and a testing data sets. Use 75\% for the training, 25\% for the testing.
 n <- nrow(meps)
 set.seed(12347)
 shuffled_meps <- meps[sample(n), ]
@@ -161,14 +161,18 @@ train_meps    <- shuffled_meps[train_indices, ]
 test_indices  <- (round(0.25 * n) + 1):n
 test_meps     <- shuffled_meps[test_indices, ]
 
-meps_mlr1 <- lm(expendop ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
+# Fit a full model using `expendop` as the outcome and all explanatory variables. Summarize the results of this model fitting.
+meps_mlr1 <- lm(___ ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = ___)
 summary(meps_mlr1)
-par(mfrow = c(2, 2))
-plot(meps_mlr1)
 
-meps_mlr2 <- lm(logexpend ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
-plot(meps_mlr2)
+# Provide diagnostic plots of the fitted model. 
+par(mfrow = c(2, 2))
+plot(___)
+
+# Fit a full model using `logexpend` as the outcome and all explanatory variables. Summarize the fit and examine diagnostic plots of the fitted model. 
+meps_mlr2 <- lm(___ ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = ___)
 summary(meps_mlr2)
+plot(meps_mlr2)
 ```
 `@solution`
 ```{r}
@@ -187,8 +191,8 @@ par(mfrow = c(2, 2))
 plot(meps_mlr1)
 
 meps_mlr2 <- lm(logexpend ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
-plot(meps_mlr2)
 summary(meps_mlr2)
+plot(meps_mlr2)
 ```
 `@sct`
 ```{r}
@@ -216,14 +220,13 @@ key: f88c368d50
 
 Modeling building can be approached using a "ground-up" strategy, where the analyst introduces a variable, examines residuls from a regression fit, and then seeks to understand the relationship between these residuals and other available variables so that these variables might be added to the model.
 
-Another approach is a "top-down" strategy where all available variables are entered into a model and unnecessary variables are pruned from the model. Both approaches are helpful when using data to specify models. This exercise illustrates the latter approach, using the stepwise function in `R` to help narrow our search for the best fitting model.
+Another approach is a "top-down" strategy where all available variables are entered into a model and unnecessary variables are pruned from the model. Both approaches are helpful when using data to specify models. This exercise illustrates the latter approach, using the [step()] function to help narrow our search for the best fitting model.
 
 `@instructions`
-From our prior work, the training dataset `train_meps` has already been loaded in. A multiple linear regression model fit object `meps_mlr2` is available that summarizes a fit of `logexpend` as the outcome variable using all 13 explanatory variables.
+From our prior work, the training dataframe `train_meps` has already been loaded in. A multiple linear regression model fit object `meps_mlr2` is available that summarizes a fit of `logexpend` as the outcome variable using all 13 explanatory variables.
 
-- Use the [Rcmdr::stepwise()](https://www.rdocumentation.org/packages/RcmdrMisc/versions/1.0-10/topics/stepwise) function to drop unnecessary variables from the full fitted model summarized in the object `meps_mlr2`.
-- Refit the recommended model.
-- As an alternative, use the explanatory variables in the recommended model and add the varibles `phstat`. Summarize the fit using the [anova()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/anova) function and note that statistical significance of the new variable.
+- Use the [step()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/step) function function to drop unnecessary variables from the full fitted model summarized in the object `meps_mlr2` and summarize this recommended model.
+- As an alternative, use the explanatory variables in the recommended model and add the varibles `phstat`. Summarize the fit and note that statistical significance of the new variable.
 - You have been reminded by your boss that use of the variable `gender` is unsuitable for actuarial pricing purposes. As an another alternative, drop `gender` from the recommended model (still keeping `phstat`). Note the statistical significance of the variable `usc`with this fitted model.
 
 `@hint`
@@ -244,44 +247,33 @@ test_meps     <- shuffled_meps[test_indices, ]
 `@sample_code`
 ```{r}
 meps_mlr2 <- lm(logexpend ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
-#library(Rcmdr)
-#temp <- stepwise(meps_mlr2, direction = 'backward/forward')
-#summary(temp)
+# Use the step() to drop unnecessary variables from the full fitted model summarized in the object `meps_mlr2` and summarize this recommended model.
+model_stepwise <- step(meps_mlr2, data = ___, direction= "both", k = log(nrow(X)), trace = 0) 
+summary(model_stepwise)
 
-meps_mlr3 <- lm(logexpend ~ gender + age + mpoor + anylimit + insure + usc , data = train_meps)
-summary(meps_mlr3)
-
-par(mfrow = c(2, 2))
-plot(meps_mlr3)
-
-meps_mlr4 <- lm(logexpend ~ gender + age + mpoor + anylimit + insure + usc  + phstat, data = train_meps)
+# As an alternative, use the explanatory variables in the recommended model and add the varibles `mpoor`. Summarize the fit  and note that statistical significance of the new variable.
+meps_mlr4 <- lm(___ ~ gender + age + phstat + anylimit + insure  + ___, data = train_meps)
 summary(meps_mlr4)
-anova(meps_mlr4)
 
-meps_mlr5 <- lm(logexpend ~ age  + anylimit + mpoor + insure  + usc  + phstat, data = train_meps)
-summary(meps_mlr5)
-anova(meps_mlr4, meps_mlr5)
+# You have been reminded by your boss that use of the variable `gender` is unsuitable for actuarial pricing purposes. As an another alternative, drop `gender` from the recommended model (still keeping `mpoor`). Note the statistical significance of the variable `usc`with this fitted model.
+meps_mlr5 <- lm(logexpend ~ age + phstat + anylimit + insure  + ___, data = train_meps)
+summary(___)
 ```
+
 `@solution`
 ```{r}
 meps_mlr2 <- lm(logexpend ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
 #library(Rcmdr)
 #temp <- stepwise(meps_mlr2, direction = 'backward/forward')
-#summary(temp)
-
-meps_mlr3 <- lm(logexpend ~ gender + age + mpoor + anylimit + insure + usc , data = train_meps)
+model_stepwise <- step(meps_mlr2, data = X, direction= "both", k = log(nrow(X)), trace = 0) 
+summary(model_stepwise)
+meps_mlr3 <- lm(logexpend ~ gender + age + phstat + anylimit + insure , data = train_meps)
 summary(meps_mlr3)
-
-par(mfrow = c(2, 2))
-plot(meps_mlr3)
-
-meps_mlr4 <- lm(logexpend ~ gender + age + mpoor + anylimit + insure + usc  + phstat, data = train_meps)
+meps_mlr4 <- lm(logexpend ~ gender + age + phstat + anylimit + insure  + mpoor, data = train_meps)
 summary(meps_mlr4)
-anova(meps_mlr4)
-
-meps_mlr5 <- lm(logexpend ~ age  + anylimit + mpoor + insure  + usc  + phstat, data = train_meps)
+meps_mlr5 <- lm(logexpend ~ age + phstat + anylimit + insure  + mpoor, data = train_meps)
 summary(meps_mlr5)
-anova(meps_mlr4, meps_mlr5)
+
 ```
 `@sct`
 ```{r}
