@@ -53,18 +53,18 @@ key: 5e10bb2831
 
 ```
 
-The Wisconsin lottery dataset has already been read into a dataset `Wisc_lottery`.
+The Wisconsin lottery dataset, `Wisc_lottery`,has already been read into a dataframe `Lot`.
 
 Like insurance, lotteries are uncertain events and so the skills to work with and interpret lottery data are readily applicable to insurance. It is common to report sales and population in thousands of units, so this exercise gives you practice in rescaling data via linear transformations.
 
 `@instructions`
-- From the available population and sales variables, create new variables, say, `pop_1000` and `sales_1000` that are in thousands (of people and of dollars, respectively).
-- Create summary statistics for the new variables.
+- From the available population and sales variables, create new variables in the dataframe `Lot`, `pop_1000` and `sales_1000` that are in thousands (of people and of dollars, respectively).
+- Create summary statistics for the dataframe that includes these new variables.
 - Plot `pop_1000` versus `sales_1000`.
 - Calculate the correlation between `pop_1000` versus `sales_1000` using the function [cor()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/cor). How does this differ between the correlation between population and sales in the original units?
 
 `@hint`
-
+Use the dataframe to refer to pop and sales as `Lot$pop` and `Lot$sales`, respectively
 
 `@pre_exercise_code`
 ```{r}
@@ -74,15 +74,27 @@ Lot <- read.csv("https://assets.datacamp.com/production/repositories/2610/datase
 ```
 `@sample_code`
 ```{r}
-Lot$pop_1000 <- ___/1000
-Lot$sales_1000 <- ___
+# Create new variables, say, `pop_1000` and `sales_1000`
+Lot$pop_1000 <- ___
+___ <- Lot$sales/1000
+
+# Create summary statistics for the dataframe
+summary(___)
+
+# Plot `pop_1000` versus `sales_1000`.
+plot(___, ___)
+
+# Calculate the correlation between `pop_1000` versus `sales_1000` 
+cor(___, ___)
 ```
 `@solution`
 ```{r}
 Lot$pop_1000 <- Lot$pop/1000
 Lot$sales_1000 <- Lot$sales/1000
-#numSummary(Lot[,c("pop_1000", "sales_1000")], statistics = c("mean", "sd", "quantiles"), quantiles = c(0,.5,1))
+summary(Lot)
 #(as.data.frame(psych::describe(Lot)))[,c(2,3,4,5,8,9)]
+#(as.data.frame(psych::describe(Lot[,c("pop_1000", "sales_1000")])))[,c(2,3,4,5,8,9)]
+#Rcmdr::numSummary(Lot[,c("pop_1000", "sales_1000")], statistics = c("mean", "sd", "quantiles"), quantiles = c(0,.5,1))
 plot(Lot$pop_1000, Lot$sales_1000)
 cor(Lot$pop_1000, Lot$sales_1000)
 ```
@@ -147,12 +159,12 @@ key: 6408595f66
 
 ```
 
-The prior video analyzed the effect that a zip code's population has on lottery sales. Instead of population, suppose that you wish to understand the effect that housing prices have on the sale of lottery tickets. In the Wisconsin lottery dataset  `Wisc_lottery` is the variable `medhome` which is the median house price for each zip code, in thousands of dollars. In this exercise, you will get a feel for the distribution of this variable by examining summary statistics, examining its relationship with sales graphically and via correlations, fitting a basic linear regression model and using this model to predict sales.
+The prior video analyzed the effect that a zip code's population has on lottery sales. Instead of population, suppose that you wish to understand the effect that housing prices have on the sale of lottery tickets. The dataframe `Lot`, read in from the Wisconsin lottery dataset  `Wisc_lottery`, contains the variable `medhome` which is the median house price for each zip code, in thousands of dollars. In this exercise, you will get a feel for the distribution of this variable by examining summary statistics, examine its relationship with sales graphically and via correlations, fit a basic linear regression model and use this model to predict sales.
 
 `@instructions`
-- Summarize the distributions of `medhome` and `sales`.
+- Summarize the dataframe `Lot` that contains `medhome` and `sales`.
 - Plot `medhome` versus `sales`. Summarize this relationship by calculating the corresponding correlation coefficient using the function [cor()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/cor).
-- Using the function [lm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/lm), regress `medhome`, the explanatory variable, on `sales`, the dependent variable.
+- Using the function [lm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/lm), regress `medhome`, the explanatory variable, on `sales`, the outcome variable. Display the regression coefficients to four significant digits.
 - Use the function [predict()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/predict) and the fitted regression model to predict sales assuming that the median house price for a zip code is 50 (in thousands of dollars).
 
 `@hint`
@@ -164,12 +176,18 @@ Lot <- read.csv("https://assets.datacamp.com/production/repositories/2610/datase
 ```
 `@sample_code`
 ```{r}
-#(as.data.frame(psych::describe(Lot[,c("medhome", "sales")])))[,c(2,3,4,5,8,9)]
-cor(Lot$medhome,Lot$sales)
-plot(Lot$medhome,Lot$sales)
-model_blr1 <- lm(sales ~ medhome, data = Lot)
-round(coefficients(model_blr1), digits=4)
-newdata <- data.frame(medhome = 50)
+# Summarize the dataframe `Lot` that contains `medhome` and `sales`
+summary(Lot)
+# Plot and calculate the correlation of `medhome` versus `sales`. 
+cor(___, ___)
+plot(___, ___)
+
+# Regress `medhome`  on `sales`. Display the regression coefficients to four significant digits.
+model_blr1 <- lm(___ ~ ___, data = Lot)
+round(coefficients(model_blr1), digits= ---)
+
+# Predict sales assuming that the median house price is 50 
+newdata <- data.frame(medhome = ___)
 predict(model_blr1, newdata)
 ```
 `@solution`
