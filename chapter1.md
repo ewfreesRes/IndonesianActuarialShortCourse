@@ -413,7 +413,7 @@ key: ef13d096e8
 
 The Massachusetts bodily injury dataset `injury` has been read in; our focus is on the `claims` variable in that dataset. 
 
-In the previous exercise, we learned that the Massachusetts bodily injury `claims` distribution was not even close to approximately normal (as evidence by the box and qq- plots). Non-normality may be induced by skewness (that we will handle via transformations in the next section). But, seeming non-normality can also be induced by one or two very large observations (that we will defined as an *outlier* later in the course). So, this exercise examines the effects on the distribution of removing the largest claims.
+In the previous exercise, we learned that the Massachusetts bodily injury `claims` distribution was not even close to approximately normal (as evidenced by the box and qq- plots). Non-normality may be induced by skewness (that we will handle via transformations in the next section). But, seeming non-normality can also be induced by one or two very large observations (called an *outlier* later in the course). So, this exercise examines the effects on the distribution of removing the largest claims.
 
 `@instructions`
 -  Use the function [tail()](https://www.rdocumentation.org/packages/utils/versions/3.5.0/topics/head) to examine the `injury` dataset and identify the largest claim
@@ -427,15 +427,24 @@ In the previous exercise, we learned that the Massachusetts bodily injury `claim
 injury <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/8cca19d0503fcf6e9d30d9cb912de5ba95ecb9c1/MassBI.csv", header = TRUE)
 claims <- injury$claims
 ```
+`@hint`
+For this data set, the [subset()] argument `claims < 25000` will keep all but the largest claim
+
 `@sample_code`
-```{r}
-tail(injury)
-injury2 <- subset(injury, claims < 25000 )
+# Examine the tail of the `injury` dataset
+tail(___)
+
+# Create a subset omitting the largest claim
+injury2 <- subset(injury, ___)
+
+# Compare the summary statistics of the omitted claim distribution to the full distribution
+summary(___)
 summary(injury2)
-sd(injury2$claim)
+
+# Compare the two distributions visually via histograms plotted next to another
 par(mfrow = c(1, 2))
-hist(claims, freq = FALSE,  main = "Full Data")
-hist(injury2$claims, freq = FALSE,  main = "Largest Claim Omitted")
+hist(___, freq = FALSE,  main = "Full Data")
+hist(___, freq = FALSE,  main = "Largest Claim Omitted")
 ```
 `@solution`
 ```{r}
@@ -512,7 +521,7 @@ We have now examined the distributions of bodily injury claims and its logarithm
 A partial response to this question will appear in later chapters when we describe interpretation of regression coefficients. Another partial response is that the log transform seems to work well with skewed insurance data sets, as we demonstrate visually in this exercise.
 
 `@instructions`
-Use the code `par(mfrow = c(2, 2))` so that four graphs appear in a 2 by 2 matrix format for easy comparisons. Plot the density of
+Use the code `par(mfrow = c(2, 2))` so that four graphs appear in a 2 by 2 matrix format for easy comparisons. Plot the [density()](https://www.rdocumentation.org/packages/stats/versions/3.5.1/topics/density) of
 
 -  claims
 -  square root of claims
@@ -520,7 +529,8 @@ Use the code `par(mfrow = c(2, 2))` so that four graphs appear in a 2 by 2 matri
 -  negative reciprocal of claims
 
 `@hint`
-You can use basic `R` calculation functions to transform data. For example, `-claims^{-1}` can be used to code the negative reciprocal of claims.
+For negative reciprocal claims, use `plot(density(-claims^(-1)))`
+
 
 `@pre_exercise_code`
 ```{r}
@@ -528,15 +538,17 @@ injury <- read.csv("https://assets.datacamp.com/production/repositories/2610/dat
 claims <- injury$claims
 ```
 `@sample_code`
-```{r}
 #This code helps to organize the four graphs into a 2 by 2 format
 par(mfrow = c(2, 2))
 #Plot the density of claims
 plot(density(___))
+
 #Plot the density of square root of claims
 plot(density(___)) 
+
 #Plot the density of logarithmic claims
 plot(density(___))
+
 #Plot the density of the negative reciprocal of claims
 plot(density(___))
 ```
