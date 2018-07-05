@@ -424,7 +424,7 @@ key: c5ee44d248
 
 ```
 
-In a prior exercise, we fit a regression model of `logcost` on `logsize`, `indcost` and a squared version of `indcost`. This model is summarized in the object `mlr_survey2`. In this exercise, we examine the robustness of the model to unusual observations.
+In a prior exercise, we fit a regression model of `logcost` on `logsize`, `indcost` and a squared version of `indcost`. This model is summarized in the object `mlr_survey2`. In this exercise, we examine the robustness of the model to unusual observations. 
 
 `@instructions`
 - Use the `R` functions [rstandard()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/influence.measures) and [hatvalues()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/influence.measures) to extract the standardized residuals and leverages from the model fitted. Summarize the distributions graphically.
@@ -442,17 +442,21 @@ mlr.survey2 <- lm(logcost ~ logsize + poly(indcost,2), data = survey)
 ```
 `@sample_code`
 ```{r}
-#summary(mlr.survey2)
-ri <- rstandard(mlr.survey2)
-hii <- hatvalues(mlr.survey2)
-mean(hii)
-
+mlr.survey2 <- lm(logcost ~ logsize + poly(indcost,2), data = survey)
+# Extract the standardized residuals and leverages from the model fitted. Summarize the distributions graphically.
+ri <- ___(mlr.survey2)
+hii <- ___(mlr.survey2)
 par(mfrow=c(1, 2))
 hist(ri, nclass=16, main="", xlab="Standardized Residuals")
 hist(hii, nclass=16, main="", xlab="Leverages")
+
+# Create a histogram of the variable `indcost`
 par(mfrow=c(1, 1))
-hist(survey$indcost, nclass=16)
-mlr.survey3 <- lm(logcost ~ logsize + poly(indcost,2), data =  survey, subset =-c(10,16))
+hist(___, nclass=16)
+
+# Re-run the regression omitting observations 10 and 16. Summarize this regression and the regression in the object  `mlr_survey2`, noting differences in the coefficients.
+mlr.survey3 <- lm(___ ~ logsize + poly(indcost,2), data = survey, subset =-c(10,16))
+summary(mlr.survey2)
 summary(mlr.survey3)
 ```
 `@solution`
@@ -460,7 +464,6 @@ summary(mlr.survey3)
 #summary(mlr.survey2)
 ri <- rstandard(mlr.survey2)
 hii <- hatvalues(mlr.survey2)
-mean(hii)
 
 par(mfrow=c(1, 2))
 hist(ri, nclass=16, main="", xlab="Standardized Residuals")
@@ -468,6 +471,7 @@ hist(hii, nclass=16, main="", xlab="Leverages")
 par(mfrow=c(1, 1))
 hist(survey$indcost, nclass=16)
 mlr.survey3 <- lm(logcost ~ logsize + poly(indcost,2), data =  survey, subset =-c(10,16))
+summary(mlr.survey2)
 summary(mlr.survey3)
 ```
 `@sct`
@@ -538,11 +542,14 @@ We have seen that adding an explanatory variable $x^2$ to a model is sometimes h
 This exercise returns to our term life data set `Term1` (preloaded) and demonstrates that collinearity can be severe when introducing interaction terms.
 
 `@instructions`
-- Fit a MLR model of `logface` on explanatory variables `education`, `numhh` and `logincome`
-- Use the function [vif()](https://www.rdocumentation.org/packages/car/versions/3.0-0/topics/vif) from the `car` package (preloaded) to calculation variance inflation factors.
-- Fit a MLR model of `logface` on explanatory variables `education` , `numhh` and `logincome` with an interaction between `numhh` and `logincome` and extract variance inflation factors.
+- Fit a MLR model of `logface` on explantory variables `education`, `numhh` and `logincome`
+- Use the function [vif()](https://www.rdocumentation.org/packages/car/versions/3.0-0/topics/vif) from the `car` package (preloaded) to calculate variance inflation factors.
+- Fit and summarize a MLR model of `logface` on explantory variables `education` , `numhh` and `logincome` with an interaction between `numhh` and `logincome`, then extract variance inflation factors.
 
 `@hint`
+If the `car` package is not available to you, then you could calculate vifs using the [lm()] function, treating each variable separately. For example
+1/(1-summary(lm(education ~ numhh + logincome, data = Term1))$r.squared)
+gives the `education` vif.
 
 
 `@pre_exercise_code`
