@@ -245,13 +245,13 @@ key: 2cb0317444
 
 ```
 
-In the prior video, you got somebackground information on the Massachusetts bodily injury dataset. This dataset, `injury`, has been read in and local variables `claims` has been created. This assignment reviews the  [hist()](https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/hist/) function for visualizing the distribution and allows you to explore density plotting, a smoothed version of the histogram.
+In the prior video, you learned about the Massachusetts bodily injury dataset. This dataframe, `injury`, has been read in and the global variable `claims` has been created. This assignment reviews the  [hist()](https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/hist/) function for visualizing distributions and allows you to explore density plotting, a smoothed version of the histogram.
 
 `@instructions`
 -  Use the function [log()](https://www.rdocumentation.org/packages/base/versions/3.5.0/topics/log/) to create the logarithmic version of the claims variable
 -  Calculate a histogram of logarithmic with 40 bins using an option in the [hist()](https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/hist/) function,  `breaks = `.
 -  Create a density plot of logarithmic claims using the functions [plot()](https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/plot/) and [density()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/density/).
--  Repeat the density plot, this time using a more refined bandwidth equal to 0.03. Use an option in the  [density()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/density/) function, `bw = `.
+-  Repeat the density plot, this time using a more refined bandwidth equal to 0.03. Use an option in the  [density()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/density/) function, `bw = `. 
 
 
 `@pre_exercise_code`
@@ -272,6 +272,7 @@ box()
 plot(___(logclaims))
 
 # Create a density plot of logarithmic claims with a smaller bandwidth
+___
 ```
 `@solution`
 ```{r}
@@ -344,15 +345,15 @@ key: 871a6b43fa
 
 ```
 
-The Massachusetts bodily injury data has already been read and used to create the local variable `claims` representing bodily injury claims. The previous video showed how to present the distribution of logarithmic claims which appeared to be approximately normally distributed. However, users are not really interested in log dollars but want to know about a unit of measurement that is more intuitive, such as dollars. 
+The Massachusetts bodily injury data has already been read and used to create the global variable `claims` representing bodily injury claims. The previous video showed how to present the distribution of logarithmic claims which appeared to be approximately normally distributed. However, users are not really interested in log dollars but want to know about a unit of measurement that is more intuitive, such as dollars. 
 
-So this assignment is based on claims, not the logarithmic version. You will review the functions  [boxplot()](https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/boxplot/) and [qqnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/qqnorm/) for visualizing the distribution through boxplots and quantile-quantile, or qq-, plots. But, because we are working with such a skewed distribution, do not be surprised that it is difficult to interpret results readily.
+So this assignment is based on claims, not the logarithmic version. You will use the  functions [boxplot()](https://www.rdocumentation.org/packages/graphics/versions/3.5.0/topics/boxplot/) and [qqnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/qqnorm/) to visualize the distribution through boxplots and quantile-quantile, or qq-, plots. But, because we are working with such a skewed distribution, do not be surprised that it is difficult to interpret these results readily.
 
 `@instructions`
 -  Produce a box plot for claims
 -  Determine the 25th empirical percentile for claims using the  [quantile()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/quantile/) function.
 -  Determine the 25th percentile for claims based on a normal distribution using the  [qnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/Normal/) function.
--  Produce a qq plot for claims. The [qqline()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/qqnorm/) function is handy for producing a reference line.
+-  Produce a normal qq plot for claims using the function [qqnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/qqnorm/). The [qqline()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/qqnorm/) function is handy for producing a reference line.
 
 
 `@pre_exercise_code`
@@ -360,6 +361,9 @@ So this assignment is based on claims, not the logarithmic version. You will rev
 injury <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/8cca19d0503fcf6e9d30d9cb912de5ba95ecb9c1/MassBI.csv", header = TRUE)
 claims <- injury$claims
 ```
+`@hint`
+Note that [qnorm()] (one `q`) is for a normal quantile and [qqnorm()] (two `q`'s!) is for the normal qq plot
+
 `@sample_code`
 ```{r}
 #Produce a box plot for claims
@@ -371,7 +375,8 @@ ___(claims, probs = ___)
 #Determine the 25th percentile for claims based on a normal distribution
 ___(p = ___, mean = mean(claims), sd = sd(claims))
 
-#Produce a qq plot for claims
+#Produce a normal qq plot for claims
+___(claims)
 ___(claims)
 ```
 `@solution`
@@ -380,7 +385,7 @@ boxplot(claims)
 quantile(claims, probs = 0.25)
 qnorm(p = 0.25, mean = mean(claims), sd = sd(claims))
 qqnorm(claims)
-qqline(claims)
+qqline(claims)  
 ```
 `@sct`
 ```{r}
