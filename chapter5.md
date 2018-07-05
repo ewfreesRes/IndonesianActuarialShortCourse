@@ -48,14 +48,14 @@ key: 748cbf094c
 
 ```
 
-With a complex dataset, you will probably want to take a look at the structure of the data. You are already familiar with taking a *summary* of a dataset which provides summary statistics for many variables. You will see that several variables in this dataset are categorical, or factor, variables. We can use the `R` [table()](https://www.rdocumentation.org/packages/base/versions/3.5.0/topics/table) function to summarize them.
+With a complex dataset, you will probably want to take a look at the structure of the data. You are already familiar with taking a [summary()] of a dataframe which provides summary statistics for many variables. You will see that several variables in this dataframe are categorical, or factor, variables. We can use the  [table()](https://www.rdocumentation.org/packages/base/versions/3.5.0/topics/table) function to summarize them.
 
 After getting a sense of the distributions of explanatory variables, we want to take a deeper dive into the distribution of the outcome variable, `expendop`. We will do this by comparing the histograms of the variable to that of its logarithmic version.
 
-To examine relationships of the outcome variable visually, we look to scatterplots for continuous variables (such as `age`) and boxplots (such as `phstat`).
+To examine relationships of the outcome variable visually, we look to scatterplots for continuous variables (such as `age`) and boxplots for categorical variables (such as `phstat`).
 
 `@instructions`
-- Examine the structure of the `meps` dataset using the [str()](https://www.rdocumentation.org/packages/utils/versions/3.5.0/topics/str/) function.
+- Examine the structure of the `meps` dataframe using the [str()](https://www.rdocumentation.org/packages/utils/versions/3.5.0/topics/str/) function. Also, get a [summary()] of the dataframe.
 - Examine the distribution of the `race` variable using the [table()](https://www.rdocumentation.org/packages/base/versions/3.5.0/topics/table) function.
 - Compare the expenditures distribution to its logarithmic version visually via histograms plotted next to another. `par(mfrow = c(1, 2))` is used to organize the plots you create.
 - Examine the distribution of logarithmic expenditures in terms of levels of `phstat` visually using the 
@@ -72,17 +72,26 @@ meps <- read.csv("https://assets.datacamp.com/production/repositories/2610/datas
 ```
 `@sample_code`
 ```{r}
-str(meps)
-summary(meps)
-table(meps$race)
+# Examine the structure and get a summary of the `meps` dataframe 
+str(___)
+summary(___)
+
+# Examine the distribution of the `race` variable 
+table(___)
+
+# Compare the expenditures distribution to its logarithmic version visually
 par(mfrow = c(1, 2))
-hist(meps$expendop, main = "", xlab = "outpatient expenditures")
-hist(log(meps$expendop), main = "", xlab = "log expenditures")
+hist(___, main = "", xlab = "outpatient expenditures")
+hist(log(___), main = "", xlab = "log expenditures")
+
+# Examine the distribution of logarithmic expenditures in terms of levels of `phstat` 
 par(mfrow = c(1, 1))
 meps$logexpend <- log(meps$expendop)
-boxplot(logexpend ~ phstat, data = meps, main = "boxplot of log expend")
-plot(meps$age,meps$logexpend, xlab = "age", ylab = "log expend")
-lines(lowess(meps$age, meps$logexpend), col="red")
+boxplot(logexpend ~ ___, data = meps, main = "boxplot of log expend")
+
+# Examine the relationship of age versus logarithmic expenditures. Superimpose a local fitting line.
+plot(___,___, xlab = "age", ylab = "log expend")
+lines(lowess(___, ___), col="red")
 ```
 `@solution`
 ```{r}
@@ -97,10 +106,11 @@ meps$logexpend <- log(meps$expendop)
 boxplot(logexpend ~ phstat, data = meps, main = "boxplot of log expend")
 plot(meps$age,meps$logexpend, xlab = "age", ylab = "log expend")
 lines(lowess(meps$age, meps$logexpend), col="red")
+
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! Summarizing data, without reference to a model, is probably the most time-consuming part of any predictive modeling exercise. Summary statistics are also a key part of any report as the illustrate features of the data that are accessible to a broad audience.")
+success_msg("Excellent! Summarizing data, without reference to a model, is probably the most time-consuming part of any predictive modeling exercise. Summary statistics are also a key part of any report as they illustrate features of the data that are accessible to a broad audience.")
 ```
 
 
