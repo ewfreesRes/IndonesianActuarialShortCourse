@@ -161,6 +161,8 @@ key: 6408595f66
 
 The prior video analyzed the effect that a zip code's population has on lottery sales. Instead of population, suppose that you wish to understand the effect that housing prices have on the sale of lottery tickets. The dataframe `Lot`, read in from the Wisconsin lottery dataset  `Wisc_lottery`, contains the variable `medhome` which is the median house price for each zip code, in thousands of dollars. In this exercise, you will get a feel for the distribution of this variable by examining summary statistics, examine its relationship with sales graphically and via correlations, fit a basic linear regression model and use this model to predict sales.
 
+
+
 `@instructions`
 - Summarize the dataframe `Lot` that contains `medhome` and `sales`.
 - Plot `medhome` versus `sales`. Summarize this relationship by calculating the corresponding correlation coefficient using the function [cor()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/cor).
@@ -270,10 +272,10 @@ How reliable is the regression line? In this excercise, you will compute some of
 `@instructions`
 - Summarize the fitted regression model in an ANOVA table.
 - Determine the size of the typical residual, $s$.
-- Determine the coefficient of determination, $R^2$.
+- Determine the coefficient of determination, $R^2$.  
 
 `@hint`
-
+You might find more details about the function [anova()]()
 
 `@pre_exercise_code`
 ```{r}
@@ -282,9 +284,15 @@ Lot <- read.csv("https://assets.datacamp.com/production/repositories/2610/datase
 `@sample_code`
 ```{r}
 model_blr <- lm(sales  ~ medhome, data = Lot)
-anova(model_blr)
-sqrt(anova(model_blr)$Mean[2])
-summary(model_blr)$r.squared
+
+# Summarize the fitted regression model in an ANOVA table.
+anova(___)
+
+# Determine the size of the typical residual, $s$.
+sqrt(anova(___)$Mean[2])
+
+# Determine the coefficient of determination, $R^2$. 
+summary(___)$r.squared
 ```
 `@solution`
 ```{r}
@@ -296,6 +304,7 @@ summary(model_blr)$r.squared
 `@sct`
 ```{r}
 success_msg("Congratulations! It will be helpful if you compare the results of this exercise to the regression of `pop` on `sales` from the prior video. We have seen that `pop` is more highly correlated with `sales` than `medhome`, so we are expecting greater uncertainty in this regression fit.")
+
 ```
 
 
