@@ -99,6 +99,7 @@ Remember that we can reference a variable, say `var`, from a data set such as `h
 ```{r}
 heights <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/c85ede6c205d22049e766bd08956b225c576255b/galton_height.csv", header = TRUE)
 ```
+
 `@sample_code`
 ```{r}
 #Define the variable
@@ -115,6 +116,7 @@ sdchild
 #Determine the probability that a child's height is less than 72 inches
 ___(72, mean=mchild, sd=sdchild)
 ```
+
 `@solution`
 ```{r}
 ht_child <- heights$child_ht
@@ -122,6 +124,7 @@ mchild <- mean(ht_child)
 sdchild <- sd(ht_child)
 pnorm(72,mean=mchild, sd=sdchild)
 ```
+
 `@sct`
 ```{r}
 test_error()
@@ -165,6 +168,7 @@ ht_child <- heights$child_ht
 mchild <- mean(ht_child)
 sdchild <- sd(ht_child)
 ```
+
 `@sample_code`
 ```{r}
 #Visualize the Distribution
@@ -177,6 +181,7 @@ ___(x, dnorm(x,mean = mchild, sd = sdchild), col = "blue")
 # Determine the probability that a son's height is greater than 60 inches
 1 - pnorm__
 ```
+
 `@solution`
 ```{r}
 hist(ht_child, freq = FALSE)
@@ -184,6 +189,7 @@ x <- seq(60, 80,by = 0.1)
 lines(x, dnorm(x,mean = mchild, sd = sdchild), col = "blue")
 1 - pnorm(72, mean = mchild , sd = sdchild)
 ```
+
 `@sct`
 ```{r}
 success_msg("Excellent! Visualizing the distribution, especially with reference to a normal, is important for communicating results of your analysis.")
@@ -259,6 +265,7 @@ In the prior video, you learned about the Massachusetts bodily injury dataset. T
 injury <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/8cca19d0503fcf6e9d30d9cb912de5ba95ecb9c1/MassBI.csv", header = TRUE)
 claims <- injury$claims
 ```
+
 `@sample_code`
 ```{r}
 #Create the logarithmic claims variable
@@ -274,6 +281,7 @@ plot(___(logclaims))
 # Create a density plot of logarithmic claims with a smaller bandwidth
 ___
 ```
+
 `@solution`
 ```{r}
 logclaims <- log(claims)
@@ -282,6 +290,7 @@ box()
 plot(density(logclaims))
 plot(density(logclaims, bw = 0.03))
 ```
+
 `@sct`
 ```{r}
 ex() %>% check_object("logclaims") %>% check_equal(incorrect_msg = "You made an error in the definition of the logarithmic claims. Check out the definition of the log() function.")
@@ -361,6 +370,7 @@ So this assignment is based on claims, not the logarithmic version. You will use
 injury <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/8cca19d0503fcf6e9d30d9cb912de5ba95ecb9c1/MassBI.csv", header = TRUE)
 claims <- injury$claims
 ```
+
 `@hint`
 Note that [qnorm()] (one `q`) is for a normal quantile and [qqnorm()] (two `q`'s!) is for the normal qq plot
 
@@ -379,6 +389,7 @@ ___(p = ___, mean = mean(claims), sd = sd(claims))
 ___(claims)
 ___(claims)
 ```
+
 `@solution`
 ```{r}
 boxplot(claims)
@@ -387,6 +398,7 @@ qnorm(p = 0.25, mean = mean(claims), sd = sd(claims))
 qqnorm(claims)
 qqline(claims)  
 ```
+
 `@sct`
 ```{r}
 success_msg("Congratulations on learning about box and qq plots. Although you are unlikely to show these plots to consumers of your analysis, you will find them useful tools as we explore multivariate aspects of data.")
@@ -427,10 +439,12 @@ In the previous exercise, we learned that the Massachusetts bodily injury `claim
 injury <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/8cca19d0503fcf6e9d30d9cb912de5ba95ecb9c1/MassBI.csv", header = TRUE)
 claims <- injury$claims
 ```
+
 `@hint`
 For this data set, the [subset()] argument `claims < 25000` will keep all but the largest claim
 
 `@sample_code`
+```{r}
 # Examine the tail of the `injury` dataset
 tail(___)
 
@@ -446,6 +460,7 @@ par(mfrow = c(1, 2))
 hist(___, freq = FALSE,  main = "Full Data")
 hist(___, freq = FALSE,  main = "Largest Claim Omitted")
 ```
+
 `@solution`
 ```{r}
 tail(injury)
@@ -456,6 +471,7 @@ par(mfrow = c(1, 2))
 hist(claims, freq = FALSE,  main = "Full Data")
 hist(injury2$claims, freq = FALSE,  main = "Largest Claim Omitted")
 ```
+
 `@sct`
 ```{r}
 success_msg("Congratulations! The goal of predictive modeling is to discover patterns in the data. However, sometimes seeming 'patterns' are the result of one or two unusual observations. Unusual observations may be due to incorrect data gathering procedures or just due to wild fluctuations in a process of interest but are common in predictive modeling.")
@@ -537,7 +553,9 @@ For negative reciprocal claims, use `plot(density(-claims^(-1)))`
 injury <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/8cca19d0503fcf6e9d30d9cb912de5ba95ecb9c1/MassBI.csv", header = TRUE)
 claims <- injury$claims
 ```
+
 `@sample_code`
+```{r}
 #This code helps to organize the four graphs into a 2 by 2 format
 par(mfrow = c(2, 2))
 #Plot the density of claims
@@ -552,6 +570,7 @@ plot(density(___))
 #Plot the density of the negative reciprocal of claims
 plot(density(___))
 ```
+
 `@solution`
 ```{r}
 par(mfrow = c(2, 2))
@@ -560,6 +579,7 @@ plot(density(claims^(0.5)))
 plot(density(log(claims)))  
 plot(density(-claims^(-1)))
 ```
+
 `@sct`
 ```{r}
 success_msg("Excellent! Transformations of data is a tool that incredibly expands potential applicability of (linear) regression techniques.")
