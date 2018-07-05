@@ -277,7 +277,7 @@ summary(meps_mlr5)
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! Sometimes variables may have good predictive power but are unacceptable for public policy purposes - in insurance, ethnicity and sometimes sex are good examples. This implies that model interpretation can be just as important as the ability to predict.")
+success_msg("Excellent! Sometimes variables may have good predictive power but are unacceptable for policy purposes - in insurance, ethnicity and sometimes sex are good examples. This implies that model interpretation can be just as important as the ability to predict.")
 ```
 
 
@@ -299,36 +299,21 @@ key: c5a168b9de
 
 ```
 
-To compare alternative models, you decide to experiment with cross-validation. For this exercise, you split the training sample into six subsamples of approximately equal size.
+To compare alternative models, you decide to utilize cross-validation. For this exercise, you split the training sample into six subsamples of approximately equal size.
 
 In the sample code, the cross-validation procedure has been summarized into a function that you can call. The input to the function is a list of variables that you select as your model explanatory variables. With this function, you can readily test several candidate models.
 
-```
-crossvalfct <- function(explvars){
-  cvdata   <- train_meps[, c("logexpend", explvars)]
-  crossval <- 0
-  for (i in 1:6) {
-    indices <- (((i-1) * round((1/6)*nrow(cvdata))) + 1):((i*round((1/6) * nrow(cvdata))))
-    # Exclude them from the train set
-    train_mlr <- lm(logexpend ~ ., data = cvdata[-indices,])
-    # Include them in the test set
-    test  <- data.frame(cvdata[indices, explvars])
-    names(test)  <- explvars
-    predict_test <- exp(predict(train_mlr, test))
-    # Compare predicted to held-out and summarize
-    predict_err  <- exp(cvdata[indices, "logexpend"]) - predict_test
-    crossval <- crossval + sum(abs(predict_err))
-  }
-```
+
 
 `@instructions`
 - Run the cross validation (`crossvalfct`) function using the explanatory variables suggested by the stepwise function.
-- Run the function again but adding the `phstat` variable
+- Run the function again but adding the `mpoor` variable
 - Run the function again but omitting the `gender` variable
-- Note which model is suggested by the cross validation function.
+
+Note which model is suggested by the cross validation function.
 
 `@hint`
-
+The cross validation function of this is very similar to the one we did earlier. Different number of subsamples, different test/training data and a different outcome variable. Except for these minor changes, it is the same function that we worked with earlier.
 
 `@pre_exercise_code`
 ```{r}
@@ -342,6 +327,8 @@ train_indices <- 1:round(0.75 * n)
 train_meps    <- shuffled_meps[train_indices, ]
 test_indices  <- (round(0.25 * n) + 1):n
 test_meps     <- shuffled_meps[test_indices, ]
+
+## Cross - Validation
 
 crossvalfct <- function(explvars){
   cvdata   <- train_meps[, c("logexpend", explvars)]
@@ -360,28 +347,34 @@ crossvalfct <- function(explvars){
   }
   crossval/1000000
 }
+
 ```
 `@sample_code`
 ```{r}
-explvars <- c("gender", "age", "race", "mpoor", "anylimit", "income", "insure", "usc")
+# Run the cross validation (`crossvalfct`) function using the explanatory variables suggested by the stepwise function.
+explvars <- c("gender", "age", "phstat", "anylimit", "insure")
 crossvalfct(explvars)
-explvars <- c("gender", "age", "race", "mpoor", "anylimit", "income", "insure", "usc", "phstat")
+
+# Run the function again but adding the `mpoor` variable
+explvars <- c(___)
 crossvalfct(explvars)
-explvars <- c("gender", "age", "mpoor", "anylimit", "income", "insure", "usc", "phstat")
+
+# Run the function again but omitting the `gender` variable
+explvars <- c( ___)
 crossvalfct(explvars)
 ```
 `@solution`
 ```{r}
-explvars <- c("gender", "age", "race", "mpoor", "anylimit", "income", "insure", "usc")
+explvars <- c("gender", "age", "phstat", "anylimit", "insure")
 crossvalfct(explvars)
-explvars <- c("gender", "age", "race", "mpoor", "anylimit", "income", "insure", "usc", "phstat")
+explvars <- c("gender", "age", "phstat", "anylimit", "insure", "mpoor")
 crossvalfct(explvars)
-explvars <- c("gender", "age", "mpoor", "anylimit", "income", "insure", "usc", "phstat")
+explvars <- c( "age", "phstat", "anylimit", "insure", "mpoor")
 crossvalfct(explvars)
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! ")
+success_msg("Excellent! Cross-validation has become an essential piece of the data analysts toolkit. Good that you now have additional experience with it.")
 ```
 
 
@@ -403,15 +396,15 @@ key: 2f0e8a0711
 
 ```
 
-From our prior work, the training `train_meps` and test `test_meps` datasets have already been loaded in. We think our best model is based on logarithmic expenditures as the outcome and the following explanatory variables:
+From our prior work, the training `train_meps` and test `test_meps` dataframes have already been loaded in. We think our best model is based on logarithmic expenditures as the outcome and the following explanatory variables:
 
 ```
-explvars3 <- c("gender", "age", "race", "mpoor", "anylimit", "income", "insure", "usc")
+explvars3 <- c("gender", "age", "phstat", "anylimit", "insure", "mpoor")
 ```
 We will compare this to a benchmark model that is based on expenditures as the outcome and all 13 explanatory variables
 
 ```
-explvars4 <- c(explvars3, "region", "educ", "phstat", "unemploy", "managedcare")
+explvars4 <- c(explvars3, "race", "income", "region", "educ", "unemploy", "managedcare", "usc")
 ```
 
 The comparisons will be based on expenditures in dollars using the held-out validation sample.
@@ -443,23 +436,36 @@ explvars4 <- c(explvars3, "region", "educ", "phstat", "unemploy", "managedcare")
 ```
 `@sample_code`
 ```{r}
-meps_mlr3 <- lm(logexpend ~ gender + age + mpoor + anylimit + income + insure + usc , data = train_meps)
+# Regress `logexpend` on the explanatory variables listed in `explvars3`
+meps_mlr3 <- lm(logexpend ~ gender + age + phstat + anylimit  + insure + mpoor, data = train_meps)
+
+# Predict expenditures (not logged) and summarize using the sum of absolute prediction errors.
+explvars3 <- c("gender", "age", "phstat", "anylimit", "insure", "mpoor")
 predict_meps3 <- test_meps[,explvars3]
 predict_mlr3  <- exp(predict(meps_mlr3, predict_meps3))
 predict_err_mlr3 <- test_meps$expendop - predict_mlr3
 sape3     <- sum(abs(predict_err_mlr3))/1000
 
-meps_mlr4 <- lm(expendop ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
+# Regress `expendop` on all 13 explanatory variables
+meps_mlr4 <- lm(___~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
+
+# Predict expenditures and summarize using the sum of absolute prediction errors.
 predict_meps4 <- test_meps[,explvars4]
 predict_mlr4  <- predict(meps_mlr4, predict_meps4)
 predict_err_mlr4 <- test_meps$expendop - predict_mlr4
 sape4     <- sum(abs(predict_err_mlr4))/1000
-
 sape3;sape4
+
+# Compare the predictions of the models graphically.
+par(mfrow = c(1, 2))
+plot(predict_err_mlr4, predict_err_mlr3, xlab = "Benchmark Predict Error", ylab = "MLR Predict Error")
+plot(predict_mlr3, test_meps$expendop, xlab = "MLR Predicts", ylab = "Held Out Expends")
 ```
 `@solution`
 ```{r}
-meps_mlr3 <- lm(logexpend ~ gender + age + mpoor + anylimit + income + insure + usc , data = train_meps)
+meps_mlr3 <- lm(logexpend ~ gender + age + phstat + anylimit  + insure + mpoor, data = train_meps)
+predict_meps3 <- test_meps[,explvars3]
+explvars3 <- c("gender", "age", "phstat", "anylimit", "insure", "mpoor")
 predict_meps3 <- test_meps[,explvars3]
 predict_mlr3  <- exp(predict(meps_mlr3, predict_meps3))
 predict_err_mlr3 <- test_meps$expendop - predict_mlr3
@@ -472,10 +478,14 @@ predict_err_mlr4 <- test_meps$expendop - predict_mlr4
 sape4     <- sum(abs(predict_err_mlr4))/1000
 
 sape3;sape4
+
+par(mfrow = c(1, 2))
+plot(predict_err_mlr4, predict_err_mlr3, xlab = "Benchmark Predict Error", ylab = "MLR Predict Error")
+plot(predict_mlr3, test_meps$expendop, xlab = "MLR Predicts", ylab = "Held Out Expends")
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! ")
+success_msg("Excellent! We found that the model of log expenditures outperforms the benchmark that models expenditures, even when the out of sample criterion was in the original 'dollar' units. It is comoforting to know that a search for a good model does well when using different out of sample criteria.")
 ```
 
 
