@@ -86,18 +86,20 @@ key: 73d95801a7
 
 ```
 
-The prior video introduced the *Survey of Consumer Finances* (SCF) term life data. A subset consisting of only those who purchased term life insurance, has already been read into a dataset `Term2`.
+The prior video introduced the *Survey of Consumer Finances* (SCF) term life data. A subset consisting of only those who purchased term life insurance, has already been read into a dataframe `Term2`.
   
-Suppose that you wish to predict the amount of term life insurance that someone will purchase but are uneasy about the `education` variable. Your sense is that, for purposes of purchasing life insurance, high school graduates and those that attend college should be treated the same. So, in this exercise, your will create a new variable, say `education1` that is equal to years of education for those with education less than or equal to 12 and is equal to 12 otherwise. The SCF `education` variable is the number of completed years of schooling and so 12 corresponds to completing high school in the US.
+Suppose that you wish to predict the amount of term life insurance that someone will purchase but are uneasy about the `education` variable. The SCF `education` variable is the number of completed years of schooling and so 12 corresponds to completing high school in the US. Your sense is that, for purposes of purchasing life insurance, high school graduates and those that attend college should be treated the same. So, in this exercise, your will create a new variable, `education1`, that is equal to years of education for those with education less than or equal to 12 and is equal to 12 otherwise.
 
 `@instructions`
-- Use the [pmin()](https://www.rdocumentation.org/packages/mc2d/versions/0.1-17/topics/pmin) function to create the `education` variable as part of the `Term2` dataset and check your work by examining summary statistics for the revised `Term2` dataset.
-- Examine correlations for the revised dataset.
+- Use the [pmin()](https://www.rdocumentation.org/packages/mc2d/versions/0.1-17/topics/pmin) function to create the `education1` variable as part of the `Term2` dataframe.
+- Check your work by examining summary statistics for the revised `Term2` dataframe.
+- Examine correlations for the revised dataframe.
 - Using the method of least squares and the function [lm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/lm), fit a MLR model using `logface` as the dependent variables and using `education`, `numhh`, and `logincome` as explanatory variables.
 - With this fitted model and the function [predict()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/predict), predict the face amount of insurance that someone with income of 40,000, 11 years of education, and 4 people in the household would purchase.
 
 `@hint`
-
+Remember that your prediction is in log dollars so you need to exponentiate it to get the 
+results in the original dollar units
 
 `@pre_exercise_code`
 ```{r}
@@ -108,29 +110,35 @@ Term2 <- Term1[, c("education", "face", "income", "logface", "logincome", "numhh
 ```
 `@sample_code`
 ```{r}
+# Create the `education1` variable as part of the `Term2` dataframe.
 Term2$education1 <- pmin(12, Term2$education)
-#summvar <- Rcmdr::numSummary(Term2, statistic = c("mean", "sd", "quantiles"), quantiles = c(0, .5, 1))
-#summvar
-summary(Term2)
-round(cor(Term2), digits=3)
-model_mlr1 <- lm(logface ~ education1 + numhh + logincome, data = Term2)
+
+# Check your work by examining summary statistics for the revised `Term2` dataframe.
+summary(___)
+
+# Examine correlations for the revised dataframe.
+round(cor(___), digits=3)
+
+# Fit a MLR model using `logface` as the dependent variables and using `education`, `numhh`, and `logincome` as explanatory variables.
+Term_mlr2 <- lm(logface ~ ___ + numhh + logincome, data = Term2)
+
+# Predict the face amount of insurance that someone with income of 40,000, 11 years of education, and 4 people in the household would purchase.
 newdata <- data.frame(logincome = log(40000), education1 = 11, numhh = 4)
-exp(predict(model_mlr1, newdata))
+exp(predict(___, newdata))
 ```
 `@solution`
 ```{r}
 Term2$education1 <- pmin(12, Term2$education)
-#summvar <- Rcmdr::numSummary(Term2, statistic = c("mean", "sd", "quantiles"), quantiles = c(0, .5, 1))
-#summvar
+#Rcmdr::numSummary(Term2, statistic = c("mean", "sd", "quantiles"), quantiles = c(0, .5, 1))
 summary(Term2)
 round(cor(Term2), digits=3)
-model_mlr1 <- lm(logface ~ education1 + numhh + logincome, data = Term2)
+Term_mlr2 <- lm(logface ~ education1 + numhh + logincome, data = Term2)
 newdata <- data.frame(logincome = log(40000), education1 = 11, numhh = 4)
-exp(predict(model_mlr1, newdata))
+exp(predict(Term_mlr2, newdata))
 ```
 `@sct`
 ```{r}
-success_msg("Excellent! You now have experience fitting a regression plane and using this plane for predictions, extending what Galton did when he used parents' heights to predict the height of an adult child. Well done!")
+success_msg("Congratulations! You now have experience fitting a regression plane and using this plane for predictions. Prediction is one of the key tasks of "predictive modeling." Well done!")
 ```
 
 
@@ -152,9 +160,11 @@ key: 9ae485f649
 
 ```
 
-In a previous exercise, you fit a MLR model using `logface` as the outcome variable and using `education`, `numhh`, and `logincome` as explanatory variables; the resulting fit is in the object `Term_mlr`. It turned out that the coefficient associated with `education` was 0.2064. We now wish to interpret this regression coefficient.
+In a previous exercise, you fit a MLR model using `logface` as the outcome variable and using `education`, `numhh`, and `logincome` as explanatory variables; the resulting fit is in the object `Term_mlr`. For this fit, the coefficient associated with `education` is 0.2064. We now wish to interpret this regression coefficient.
 
-The typical interpretation of coefficients in a regression model is as a partial slope. That is, for the coefficient $b_1$ associated with $x_1$, we interpret $b_1$ to be amount that the expected outcome changes per unit change in $x_1$, holding the other explanatory variables fixed. For the term life example, the units of the outcome are in logarithmic dollars. So, for small values of $b_1$, we can interpret this to be a *proportional* change in dollars.
+The typical interpretation of coefficients in a regression model is as a partial slope. That is, for the coefficient $b_1$ associated with $x_1$, we interpret $b_1$ to be amount that the expected outcome changes per unit change in $x_1$, holding the other explanatory variables fixed. 
+
+For the term life example, the units of the outcome are in logarithmic dollars. So, for small values of $b_1$, we can interpret this to be a *proportional* change in dollars.
 
 `@instructions`
 - Determine least square fitted values for several selected values of `education`, holding other explantory variables fixed. For this part of the demonstration, we used their mean values.
@@ -173,18 +183,25 @@ Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term2)
 ```
 `@sample_code`
 ```{r}
+Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term2)
+summary(Term_mlr)$coefficients[,1]
+
+# Determine least square fitted values for several selected values of `education`, holding other explantory variables fixed.
 educ_predict <- c(14,14.1,14.2,14.3)
-newdata1 <- data.frame(logincome=mean(Term2$logincome), education=educ_predict, numhh=mean(Term2$numhh))
+newdata1 <- data.frame(logincome = mean(Term2$logincome), education = educ_predict, numhh = mean(Term2$numhh))
 lsfits1 <- predict(Term_mlr, newdata1)
 lsfits1
+
+# Determine the proportional changes. Note the relation between these values from a discrete change approximation to the regression coefficient for `education` equal to 0.2064.
 lsfits1[2:4] - lsfits1[1:3]
 pchange_fits1 <- exp(lsfits1[2:4] - lsfits1[1:3])
 pchange_fits1
+
 ```
 `@solution`
 ```{r}
 educ_predict <- c(14,14.1,14.2,14.3)
-newdata1 <- data.frame(logincome=mean(Term2$logincome), education=educ_predict, numhh=mean(Term2$numhh))
+newdata1 <- data.frame(logincome = mean(Term2$logincome), education = educ_predict, numhh = mean(Term2$numhh))
 lsfits1 <- predict(Term_mlr, newdata1)
 lsfits1
 lsfits1[2:4] - lsfits1[1:3]
@@ -215,7 +232,7 @@ key: 0412663e7b
 
 ```
 
-In a previous exercise, you fit a MLR model using `logface` as the outcome variable and using `education`, `numhh`, and `logincome` as explanatory variables; the resulting fit is in the object `Term_mlr`. It turned out that the coefficient associated with `logincome` was 0.4935. We now wish to interpret this regression coefficient. 
+In a previous exercise, you fit a MLR model using `logface` as the outcome variable and using `education`, `numhh`, and `logincome` as explanatory variables; the resulting fit is in the object `Term_mlr`. From this fit, the coefficient associated with `logincome` is 0.4935. We now wish to interpret this regression coefficient. 
 
 The typical interpretation of coefficients in a regression model is as a partial slope. When both $x_1$ and $y$ are in logarithmic units, then we can interpret $b_1$ to be ratio of two percentage changes, known as an *elasticity* in economics. Mathematically, we summarize this as
 $$
@@ -229,7 +246,7 @@ $$
 - Calculate the ratio of proportional changes of fitted values to those for income. Note the relation between these values (from a discrete change approximation) to the regression coefficient for `logincome` equal to 0.4935.
 
 `@hint`
-
+When you calculate the ratio of proportional changes of fitted values to those for income, note the relation between these values (from a discrete change approximation) to the regression coefficient for `logincome` equal to 0.4935.
 
 `@pre_exercise_code`
 ```{r}
@@ -240,21 +257,31 @@ Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term2)
 ```
 `@sample_code`
 ```{r}
+Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term2)
+summary(Term_mlr)$coefficients[,1]
+# For several selected values of `logincome`, determine the corresponding proportional changes.
 logincome_pred <- c(11,11.1,11.2,11.3)
 pchange_income <- 100*(exp(logincome_pred[2:4])/exp(logincome_pred[1:3])-1)
 pchange_income
-newdata2 <- data.frame(logincome=logincome_pred,education=mean(Term2$education), numhh=mean(Term2$numhh))
+
+# Determine least square fitted values for several selected values of `logincome`, holding other explantory variables fixed.
+newdata2 <- data.frame(logincome = logincome_pred, education = mean(Term2$education), numhh = mean(Term2$numhh))
 lsfits2 <- predict(Term_mlr, newdata2)
+
+# Determine the corresponding proportional changes for the fitted values. 
 pchange_fits2 <- 100*(exp(lsfits2[2:4])/exp(lsfits2[1:3])-1)
 pchange_fits2
+
+# Calculate the ratio of proportional changes of fitted values to those for income.
 pchange_fits2/pchange_income
+
 ```
 `@solution`
 ```{r}
 logincome_pred <- c(11,11.1,11.2,11.3)
 pchange_income <- 100*(exp(logincome_pred[2:4])/exp(logincome_pred[1:3])-1)
 pchange_income
-newdata2 <- data.frame(logincome=logincome_pred,education=mean(Term2$education), numhh=mean(Term2$numhh))
+newdata2 <- data.frame(logincome = logincome_pred, education = mean(Term2$education), numhh = mean(Term2$numhh))
 lsfits2 <- predict(Term_mlr, newdata2)
 pchange_fits2 <- 100*(exp(lsfits2[2:4])/exp(lsfits2[1:3])-1)
 pchange_fits2
