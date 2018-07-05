@@ -563,20 +563,20 @@ Term1 <- subset(Term, subset = face > 0)
 Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term1)
 
 # Calculate the variance inflation factors.
-car::vif(Term_mlr)
+#car::vif(Term_mlr)
 
 # Fit and summarize a MLR model of `logface` on explantory variables `education` , `numhh` and `logincome` with an interaction between `numhh` and `logincome`, then extract variance inflation  factors.
 Term_mlr1 <- lm(logface ~ education + numhh*logincome , data = Term1)
 summary(Term_mlr1)
-car::vif(Term_mlr1)
+#car::vif(Term_mlr1)
 ```
 `@solution`
 ```{r}
 Term_mlr <- lm(logface ~ education + numhh + logincome, data = Term1)
-car::vif(Term_mlr)
+#car::vif(Term_mlr)
 Term_mlr1 <- lm(logface ~ education + numhh*logincome , data = Term1)
 summary(Term_mlr1)
-car::vif(Term_mlr1)
+#car::vif(Term_mlr1)
 ```
 `@sct`
 ```{r}
