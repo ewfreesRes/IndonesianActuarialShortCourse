@@ -760,7 +760,7 @@ anova(Term_mlr3,Term_mlr4)
 ```
 `@sct`
 ```{r}
-success_msg("Congratulations! Hypothesis testing is a primary tool for  "inferring" about the real world {in contrast to mathematical "deduction".} Moreover, as we will see in the next chapter, it can also be used to develop a model.")
+success_msg("Congratulations! Hypothesis testing is a primary tool for  'inferring' about the real world {in contrast to mathematical 'deduction'.} Moreover, as we will see in the next chapter, it can also be used to develop a model.")
 ```
 
 
