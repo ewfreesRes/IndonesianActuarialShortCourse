@@ -129,7 +129,6 @@ exp(predict(___, newdata))
 `@solution`
 ```{r}
 Term2$education1 <- pmin(12, Term2$education)
-#Rcmdr::numSummary(Term2, statistic = c("mean", "sd", "quantiles"), quantiles = c(0, .5, 1))
 summary(Term2)
 round(cor(Term2), digits=3)
 Term_mlr2 <- lm(logface ~ education1 + numhh + logincome, data = Term2)
@@ -138,6 +137,10 @@ exp(predict(Term_mlr2, newdata))
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("Term2", incorrect_msg = "Is the new education variable properly defined using the pmin() function?")
+test_object("Term_mlr2", incorrect_msg = "The MLR model is incorrectly specified.")
+test_object("newdata", incorrect_msg = "The new data object is incorrectly specified.")
 success_msg("Congratulations! You now have experience fitting a regression plane and using this plane for predictions. Prediction is one of the key tasks of "predictive modeling." Well done!")
 ```
 
@@ -210,6 +213,11 @@ pchange_fits1
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("educ_predict", incorrect_msg = "Check to see that values of the education predictor variable are properly coded.")
+test_object("newdata1", incorrect_msg = "The new data object is incorrectly specified.")
+test_object("lsfits1", incorrect_msg = "The predicted fits at different values of education are incorrectly specified.")
+test_object("pchange_fits1", incorrect_msg = "The proportional changes at different values of education are incorrectly specified.")
 success_msg("Congratulations! From calculus, small changes in logarithmic values can be interpreted as proportional changes. This is the reason for using natural logarithms.")
 ```
 
