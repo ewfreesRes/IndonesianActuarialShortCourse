@@ -297,6 +297,12 @@ pchange_fits2/pchange_income
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("logincome_pred", incorrect_msg = "Check to see that values of the logarithmic income predictor variable are properly coded.")
+test_object("pchange_income", incorrect_msg = "Check to see that the proportional changes of logarithmic income predictor variable are properly coded.")
+test_object("newdata2", incorrect_msg = "The new data object is incorrectly specified.")
+test_object("lsfits2", incorrect_msg = "The predicted fits at different values of logarithmic income are incorrectly specified.")
+test_object("pchange_fits2", incorrect_msg = "The proportional changes at different values of logarithmic income are incorrectly specified.")
 success_msg("Congratulations! When both $x_1$ and $y$ are in logarithmic units, then we can interpret $b_1$ to be ratio of two percentage changes, known as an *elasticity* in economics.")
 ```
 
