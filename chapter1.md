@@ -122,13 +122,15 @@ ___(72, mean=mchild, sd=sdchild)
 ht_child <- heights$child_ht
 mchild <- mean(ht_child)
 sdchild <- sd(ht_child)
-pnorm(72,mean=mchild, sd=sdchild)
+pnorm(72, mean=mchild, sd=sdchild)
 ```
 
 `@sct`
 ```{r}
 test_error()
 test_object("ht_child", incorrect_msg = "The child's height variable was defined in the wrong way. (You might check the hint.)")
+test_object("mchild", incorrect_msg = "The mean child's height is calculated incorrectly. Check out the mean() function.")
+test_object("sdchild", incorrect_msg = "The standard deviation of child's height is calculated incorrectly. Check out the sd() function.")
 success_msg("Excellent! With this procedure, you can now calculate probabilities for any distribution using a normal curve approximation.")
 ```
 
@@ -159,7 +161,8 @@ As in the prior exercise, from the Galton dataset `heights`, the heights of 928 
 -  Determine the probability that a son's height is greater than 72 inches
 
 `@hint`
-No hints for now. No hints for now. No hints for now.
+- Use the function [dnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/Normal/) to calculate the normal density, similar to the cumulative probabilites that you calculated using [pnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/Normal/)
+-  To calculate probabilities greater that an amount, simply use 1 minus the cumulative probability
 
 `@pre_exercise_code`
 ```{r}
@@ -178,8 +181,9 @@ ___(___, freq = FALSE)
 x <- seq(60, 80,by = 0.1)
 ___(x, dnorm(x,mean = mchild, sd = sdchild), col = "blue")
 
-# Determine the probability that a son's height is greater than 60 inches
-1 - pnorm__
+# Determine the probability that a son's height is greater than 72 inches
+prob <- 1 - pnorm__
+prob 
 ```
 
 `@solution`
@@ -187,11 +191,13 @@ ___(x, dnorm(x,mean = mchild, sd = sdchild), col = "blue")
 hist(ht_child, freq = FALSE)
 x <- seq(60, 80,by = 0.1)
 lines(x, dnorm(x,mean = mchild, sd = sdchild), col = "blue")
-1 - pnorm(72, mean = mchild , sd = sdchild)
+prob <- 1 - pnorm(72, mean = mchild , sd = sdchild)
 ```
 
 `@sct`
 ```{r}
+test_error()
+test_object("prob", incorrect_msg = "The probability of being greater than 72 was calculated incorrectly. (You might check the hint.)")
 success_msg("Excellent! Visualizing the distribution, especially with reference to a normal, is important for communicating results of your analysis.")
 ```
 
