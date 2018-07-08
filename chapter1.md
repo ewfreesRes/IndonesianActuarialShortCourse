@@ -299,6 +299,7 @@ plot(density(logclaims, bw = 0.03))
 
 `@sct`
 ```{r}
+test_error()
 ex() %>% check_object("logclaims") %>% check_equal(incorrect_msg = "You made an error in the definition of the logarithmic claims. Check out the definition of the log() function.")
 success_msg("Excellent! Visualizing the distribution is important and smoothing techniques allow viewers to see important patterns without being distracted by random fluctations.")
 ```
@@ -378,7 +379,7 @@ claims <- injury$claims
 ```
 
 `@hint`
-Note that [qnorm()] (one `q`) is for a normal quantile and [qqnorm()] (two `q`'s!) is for the normal qq plot
+Note that [qnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/Normal/) (one `q`) is for a normal quantile and [qqnorm()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/qqnorm/). (two `q`'s!) is for the normal qq plot
 
 `@sample_code`
 ```{r}
@@ -386,10 +387,12 @@ Note that [qnorm()] (one `q`) is for a normal quantile and [qqnorm()] (two `q`'s
 ___(claims)
 
 #Determine the 25th empirical percentile for claims
-___(claims, probs = ___)
+q25 <- ___(claims, probs = ___)
+q25
 
 #Determine the 25th percentile for claims based on a normal distribution
-___(p = ___, mean = mean(claims), sd = sd(claims))
+qn25 <- ___(p = ___, mean = mean(claims), sd = sd(claims))
+qn25
 
 #Produce a normal qq plot for claims
 ___(claims)
@@ -399,15 +402,20 @@ ___(claims)
 `@solution`
 ```{r}
 boxplot(claims)
-quantile(claims, probs = 0.25)
-qnorm(p = 0.25, mean = mean(claims), sd = sd(claims))
+q25 <- quantile(claims, probs = 0.25)
+q25
+qn25 <- qnorm(p = 0.25, mean = mean(claims), sd = sd(claims))
+qn25
 qqnorm(claims)
-qqline(claims)  
+qqline(claims)
 ```
 
 `@sct`
 ```{r}
-success_msg("Congratulations on learning about box and qq plots. Although you are unlikely to show these plots to consumers of your analysis, you will find them useful tools as we explore multivariate aspects of data.")
+test_error()
+test_object("q25", incorrect_msg = "You calculated the 25th quantile incorrectly. Check out the quantile() function.")
+test_object("qn25", incorrect_msg = "You calculated the 25th quantile incorrectly. Check out the qnorm() function.")
+success_msg("Congratulations on learning about box and qq plots. Although you are unlikely to show these plots to consumers of your analysis, you will find them useful tools for exploring multivariate aspects of data.")
 ```
 
 
