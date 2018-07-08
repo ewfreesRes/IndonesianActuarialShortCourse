@@ -74,7 +74,7 @@ Lot <- read.csv("https://assets.datacamp.com/production/repositories/2610/datase
 ```
 `@sample_code`
 ```{r}
-# Create new variables, say, `pop_1000` and `sales_1000`
+# Create new variables called `pop_1000` and `sales_1000`
 Lot$pop_1000 <- ___
 ___ <- Lot$sales/1000
 
@@ -92,14 +92,13 @@ cor(___, ___)
 Lot$pop_1000 <- Lot$pop/1000
 Lot$sales_1000 <- Lot$sales/1000
 summary(Lot)
-#(as.data.frame(psych::describe(Lot)))[,c(2,3,4,5,8,9)]
-#(as.data.frame(psych::describe(Lot[,c("pop_1000", "sales_1000")])))[,c(2,3,4,5,8,9)]
-#Rcmdr::numSummary(Lot[,c("pop_1000", "sales_1000")], statistics = c("mean", "sd", "quantiles"), quantiles = c(0,.5,1))
 plot(Lot$pop_1000, Lot$sales_1000)
 cor(Lot$pop_1000, Lot$sales_1000)
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("Lot$pop_1000", incorrect_msg = "Looks like the population variable is defined incorrectly. The hint may help.")
 success_msg("Congratulations! We will rescale data using 'linear' transformations regularly. In part we do this for communicating our analysis to others. Also in part, this is for our own convenience as it can allow us to see patterns more readily.")
 ```
 
