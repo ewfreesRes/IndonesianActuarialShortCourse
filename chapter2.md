@@ -69,8 +69,7 @@ Use the dataframe to refer to pop and sales as `Lot$pop` and `Lot$sales`, respec
 `@pre_exercise_code`
 ```{r}
 Lot <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/a792b30fb32b0896dd6894501cbab32b5d48df51/Wisc_lottery.csv", header = TRUE)
-#library(Rcmdr)
-#library(psych)
+
 ```
 `@sample_code`
 ```{r}
@@ -98,13 +97,9 @@ cor(Lot$pop_1000, Lot$sales_1000)
 `@sct`
 ```{r}
 test_error()
-test_object("Lot$pop_1000", incorrect_msg = "Looks like the population variable is defined incorrectly. The hint may help.")
+test_object("Lot", incorrect_msg = "Looks like a variable is defined incorrectly. The hint may help.")
 success_msg("Congratulations! We will rescale data using 'linear' transformations regularly. In part we do this for communicating our analysis to others. Also in part, this is for our own convenience as it can allow us to see patterns more readily.")
 ```
-
-
-
-
 
 
 ---
@@ -193,7 +188,6 @@ predict(model_blr1, newdata)
 ```
 `@solution`
 ```{r}
-#(as.data.frame(psych::describe(Lot[,c("medhome", "sales")])))[,c(2,3,4,5,8,9)]
 cor(Lot$medhome,Lot$sales)
 plot(Lot$medhome,Lot$sales)
 model_blr1 <- lm(sales ~ medhome, data = Lot)
@@ -203,6 +197,9 @@ predict(model_blr1, newdata)
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("model_blr1", incorrect_msg = "The basic linear regression model is incorrectly specified.")
+test_object("newdata", incorrect_msg = "The new data is incorrectly specified.")
 success_msg("Congratulations! You now have experience fitting a regression line and using this line for predictions, just as Galton did when he used parents' heights to predict the height of an adult child. Well done!")
 ```
 
