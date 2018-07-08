@@ -521,18 +521,6 @@ In this exercise, you learn how to:
 
 -    Symmetrize a skewed distribution using a logarithmic transformation
 
-`@hint`
-
-
-
-
-
-
-
-
-
-
-
 
 ---
 ## Distribution of transformed bodily injury claims
