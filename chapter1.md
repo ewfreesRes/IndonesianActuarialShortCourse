@@ -437,7 +437,7 @@ key: ef13d096e8
 
 ```
 
-The Massachusetts bodily injury dataset `injury` has been read in; our focus is on the `claims` variable in that dataset. 
+The Massachusetts bodily injury dataframe `injury` has been read in; our focus is on the `claims` variable in that dataset. 
 
 In the previous exercise, we learned that the Massachusetts bodily injury `claims` distribution was not even close to approximately normal (as evidenced by the box and qq- plots). Non-normality may be induced by skewness (that we will handle via transformations in the next section). But, seeming non-normality can also be induced by one or two very large observations (called an *outlier* later in the course). So, this exercise examines the effects on the distribution of removing the largest claims.
 
@@ -479,8 +479,8 @@ hist(___, freq = FALSE,  main = "Largest Claim Omitted")
 ```{r}
 tail(injury)
 injury2 <- subset(injury, claims < 25000 )
+summary(injury)
 summary(injury2)
-sd(injury2$claim)
 par(mfrow = c(1, 2))
 hist(claims, freq = FALSE,  main = "Full Data")
 hist(injury2$claims, freq = FALSE,  main = "Largest Claim Omitted")
@@ -488,6 +488,8 @@ hist(injury2$claims, freq = FALSE,  main = "Largest Claim Omitted")
 
 `@sct`
 ```{r}
+test_error()
+test_object("injury2", incorrect_msg = "You defined the `injury` dataframe incorrectly. Check out the subset function (and maybe look over the hint).")
 success_msg("Congratulations! The goal of predictive modeling is to discover patterns in the data. However, sometimes seeming 'patterns' are the result of one or two unusual observations. Unusual observations may be due to incorrect data gathering procedures or just due to wild fluctuations in a process of interest but are common in predictive modeling.")
 ```
 
