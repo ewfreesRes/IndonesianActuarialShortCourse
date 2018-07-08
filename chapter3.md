@@ -141,7 +141,7 @@ test_error()
 test_object("Term2", incorrect_msg = "Is the new education variable properly defined using the pmin() function?")
 test_object("Term_mlr2", incorrect_msg = "The MLR model is incorrectly specified.")
 test_object("newdata", incorrect_msg = "The new data object is incorrectly specified.")
-success_msg("Congratulations! You now have experience fitting a regression plane and using this plane for predictions. Prediction is one of the key tasks of "predictive modeling." Well done!")
+success_msg("Congratulations! You now have experience fitting a regression plane and using this plane for predictions. Prediction is one of the key tasks of 'predictive modeling.' Well done!")
 ```
 
 
