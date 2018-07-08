@@ -271,7 +271,8 @@ How reliable is the regression line? In this excercise, you will compute some of
 - Determine the coefficient of determination, $R^2$.  
 
 `@hint`
-You might find more details about the function [anova()]()
+Learn more about possibilities through the `Rdocumentation` site. If you have not done so already, check out the function [anova()](https://www.rdocumentation.org/packages/stats/versions/3.5.1/topics/anova)
+
 
 `@pre_exercise_code`
 ```{r}
@@ -299,6 +300,8 @@ summary(model_blr)$r.squared
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("model_blr", incorrect_msg = "The basic linear regression model is incorrectly specified.")
 success_msg("Congratulations! It will be helpful if you compare the results of this exercise to the regression of `pop` on `sales` from the prior video. We have seen that `pop` is more highly correlated with `sales` than `medhome`, so we are expecting greater uncertainty in this regression fit.")
 
 ```
@@ -371,6 +374,8 @@ summary(model_blr2)$r.squared
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("model_blr1", incorrect_msg = "The basic linear regression model is incorrectly specified.")
 success_msg("Congratulations! In this exercise, you have seen that rescaling does not affect our measures of goodness of fit in any meaningful way. For example, the coefficient of determinations are completely unaffected. This is helpful because we will rescale variables extensively in our search for patterns in the data.")
 ```
 
@@ -477,6 +482,9 @@ predict(model_blr1, NewData1, interval = "prediction", level = .95)
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("model_blr1", incorrect_msg = "The basic linear regression model is incorrectly specified.")
+test_object("NewData1", incorrect_msg = "The new data object is incorrectly specified.")
 success_msg("Congratulations! Much of what we learn from a data modeling exercise can be summarized using standard inferential tools: hypothesis testing, confidence intervals, and prediction.")
 ```
 
@@ -593,6 +601,9 @@ qqline(residuals(model_Kenosha))
 ```
 `@sct`
 ```{r}
+test_error()
+test_object("model_blr1", incorrect_msg = "The basic linear regression model is incorrectly specified.")
+test_object("model_Kenosha", incorrect_msg = "The linear regression model without Kenosha is incorrectly specified.")
 success_msg("Congratulations! Just because an observation is unusual does not make it bad or noninformative. Kenosha is close to the Illinois border; residents from Illinois probably participate in the Wisconsin lottery thus effectively increasing the potential pool of sales in Kenosha. Although unusual, there is interesting information to be learned from this observation.")
 ```
 
