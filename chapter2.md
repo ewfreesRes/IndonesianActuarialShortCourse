@@ -602,7 +602,7 @@ qqline(residuals(model_Kenosha))
 `@sct`
 ```{r}
 test_error()
-test_object("model_blr1", incorrect_msg = "The basic linear regression model is incorrectly specified.")
+test_object("model_blr", incorrect_msg = "The basic linear regression model is incorrectly specified.")
 test_object("model_Kenosha", incorrect_msg = "The linear regression model without Kenosha is incorrectly specified.")
 success_msg("Congratulations! Just because an observation is unusual does not make it bad or noninformative. Kenosha is close to the Illinois border; residents from Illinois probably participate in the Wisconsin lottery thus effectively increasing the potential pool of sales in Kenosha. Although unusual, there is interesting information to be learned from this observation.")
 ```

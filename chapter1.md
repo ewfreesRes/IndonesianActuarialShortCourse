@@ -28,17 +28,6 @@ In this exercise, you learn how to:
 -    Fit a data set to a normal curve
 -    Calculate probabilities under a standard normal curve
 
-`@hint`
-
-
-
-
-
-
-
-
-
-
 
 
 ---
