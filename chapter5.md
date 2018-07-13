@@ -225,7 +225,7 @@ Another approach is a "top-down" strategy where all available variables are ente
 `@instructions`
 From our prior work, the training dataframe `train_meps` has already been loaded in. A multiple linear regression model fit object `meps_mlr2` is available that summarizes a fit of `logexpend` as the outcome variable using all 13 explanatory variables.
 
-- Use the [step()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/step) function function to drop unnecessary variables from the full fitted model summarized in the object `meps_mlr2` and summarize this recommended model.
+- Use the [step()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/step) function to drop unnecessary variables from the full fitted model summarized in the object `meps_mlr2` and summarize this recommended model.
 - As an alternative, use the explanatory variables in the recommended model and add the varibles `phstat`. Summarize the fit and note that statistical significance of the new variable.
 - You have been reminded by your boss that use of the variable `gender` is unsuitable for actuarial pricing purposes. As an another alternative, drop `gender` from the recommended model (still keeping `phstat`). Note the statistical significance of the variable `usc`with this fitted model.
 
@@ -243,12 +243,13 @@ train_indices <- 1:round(0.75 * n)
 train_meps    <- shuffled_meps[train_indices, ]
 test_indices  <- (round(0.25 * n) + 1):n
 test_meps     <- shuffled_meps[test_indices, ]
+
 ```
 `@sample_code`
 ```{r}
 meps_mlr2 <- lm(logexpend ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
 # Use the step() to drop unnecessary variables from the full fitted model summarized in the object `meps_mlr2` and summarize this recommended model.
-model_stepwise <- step(meps_mlr2, data = ___, direction= "both", k = log(nrow(X)), trace = 0) 
+model_stepwise <- step(___, direction= "both", k = log(nrow(X)), trace = 0) 
 summary(model_stepwise)
 
 # As an alternative, use the explanatory variables in the recommended model and add the varibles `mpoor`. Summarize the fit  and note that statistical significance of the new variable.
@@ -263,9 +264,8 @@ summary(___)
 `@solution`
 ```{r}
 meps_mlr2 <- lm(logexpend ~ gender + age + race + region + educ + phstat + mpoor + anylimit + income + insure + usc + unemploy + managedcare, data = train_meps)
-#library(Rcmdr)
-#temp <- stepwise(meps_mlr2, direction = 'backward/forward')
-model_stepwise <- step(meps_mlr2, data = X, direction= "both", k = log(nrow(X)), trace = 0) 
+
+model_stepwise <- step(meps_mlr2, direction= "both", k = log(nrow(train_meps)), trace = 0) 
 summary(model_stepwise)
 meps_mlr3 <- lm(logexpend ~ gender + age + phstat + anylimit + insure , data = train_meps)
 summary(meps_mlr3)
