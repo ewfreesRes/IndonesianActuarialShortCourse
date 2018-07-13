@@ -220,7 +220,7 @@ key: f88c368d50
 
 Modeling building can be approached using a "ground-up" strategy, where the analyst introduces a variable, examines residuls from a regression fit, and then seeks to understand the relationship between these residuals and other available variables so that these variables might be added to the model.
 
-Another approach is a "top-down" strategy where all available variables are entered into a model and unnecessary variables are pruned from the model. Both approaches are helpful when using data to specify models. This exercise illustrates the latter approach, using the [step()] function to help narrow our search for the best fitting model.
+Another approach is a "top-down" strategy where all available variables are entered into a model and unnecessary variables are pruned from the model. Both approaches are helpful when using data to specify models. This exercise illustrates the latter approach, using the [step()](https://www.rdocumentation.org/packages/stats/versions/3.5.0/topics/step) function to help narrow our search for the best fitting model.
 
 `@instructions`
 From our prior work, the training dataframe `train_meps` has already been loaded in. A multiple linear regression model fit object `meps_mlr2` is available that summarizes a fit of `logexpend` as the outcome variable using all 13 explanatory variables.
