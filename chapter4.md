@@ -693,6 +693,9 @@ The function [sample()] is for taking random samples. We use it without replacem
 Term <- read.csv("https://assets.datacamp.com/production/repositories/2610/datasets/efc64bc2d78cf6b48ad2c3f5e31800cb773de261/term_life.csv", header = TRUE)
 Term1 <- subset(Term, subset = face > 0)
 Term1$marstat <- as.factor(Term1$marstat)
+n <- nrow(Term1)
+set.seed(12347)
+shuffled_Term1 <- Term1[sample(n), ]
 
 crossvalfct <- function(explvars){
   cvdata   <- shuffled_Term1[, c("logface", explvars)]
